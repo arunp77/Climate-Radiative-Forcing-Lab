@@ -50,9 +50,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .kpi .v { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .kpi .l { color: var(--muted); font-size: .92rem; }
 .kpis.two { grid-template-columns: repeat(2, 1fr); }
-.chart { width: 100%; height: 440px; }
-.chart.tall { height: 560px; }
-.chart.xtall { height: 640px; }
+.chart { width: 100%; height: clamp(300px, 50vh, 460px); }
+.chart.tall { height: clamp(340px, 60vh, 580px); }
+.chart.xtall { height: clamp(360px, 64vh, 620px); }
 pre { margin: 0; white-space: pre-wrap; font-size: .9rem; background: #f3f6fa; padding: 10px; border-radius: 6px; overflow-x: auto; }
 .adv-only { display: none; }
 body.adv .adv-only { display: block; }
@@ -106,7 +106,14 @@ ul.note { padding-left: 20px; }
   .kpis, .kpis.two { grid-template-columns: 1fr; }
   header { position: static; }
   .tabs { overflow-x: auto; }
-  .chart { height: 380px; } .chart.tall { height: 460px; } .chart.xtall { height: 520px; }
 }
 .yr input[type=range] { width: 280px; }
 header { box-shadow: 0 1px 4px rgba(20,40,60,.06); }
+
+/* laptops and short windows: slimmer header that scrolls away, so a chart fits in the visible area */
+@media (max-height: 820px) {
+  header { position: static; }
+  header .bar { padding-top: 8px; }
+  .sub { display: none; }
+  .controls { top: 8px; max-height: calc(100vh - 16px); }
+}
