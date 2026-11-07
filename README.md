@@ -81,13 +81,13 @@ Design rules: physics lives in Python and is tested there; closed-form expressio
 
 ## Data, licence and citation
 
-- **Licence:** Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (see [LICENSE](LICENSE)): free for teaching and learning, share and adapt with attribution, not for commercial use. Creative Commons recommends software licences for code, but this is the choice made for the project; if you prefer to reuse the code under a software licence, please open an issue.
+- **Licence:** Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (see [LICENSE](LICENSE)): free for teaching and learning, share and adapt with attribution, not for commercial use. Creative Commons recommends software licences for code, but this is the choice made for the project; if you prefer to reuse the code under a software licence, please write to arunp77@virta-ai.com.
 - **Third-party data keep their own terms** (HITRAN and MT_CKD for research and teaching only; RCMIP-derived scenarios under CC BY-SA 4.0; HadCRUT5 under the Open Government Licence): see [NOTICE.md](NOTICE.md) and [data/MANIFEST.md](data/MANIFEST.md). The raw HITRAN files are not in the repository.
 - **Cite** the tool with [CITATION.cff](CITATION.cff) (GitHub shows a "Cite this repository" button) and cite the data sources in [docs/references.md](docs/references.md).
 
 ## Feedback and contributions
 
-Found an error, an unclear explanation or a gas that is missing? Please open an issue: <https://github.com/arunp77/Climate-Radiative-Forcing-Lab/issues>. A change that weakens a test tolerance or removes a check should say why in the commit message.
+Found an error, an unclear explanation or a gas that is missing? Please write to arunp77@virta-ai.com. A change that weakens a test tolerance or removes a check should say why in the commit message.
 
 ## What is not here yet
 

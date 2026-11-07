@@ -22,8 +22,8 @@
 
 ## Use, licence and citation
 
-Free to use, copy and adapt for teaching and learning (Creative Commons Attribution-NonCommercial-ShareAlike 4.0). Spectral data are used under the HITRAN and AER terms (research and teaching use only); see the notice file in the repository for every dataset. To cite the tool, use the citation file in the repository, and cite the data sources listed under References.
+Free to use, copy and adapt for teaching and learning (Creative Commons Attribution-NonCommercial-ShareAlike 4.0). Spectral data are used under the HITRAN and AER terms (research and teaching use only); see the notice file distributed with the project for every dataset. To cite the tool, use the citation file distributed with the project, and cite the data sources listed under References.
 
-## Source code and feedback
+## Contact and feedback
 
-Code, data notes and build instructions: <https://github.com/arunp77/Climate-Radiative-Forcing-Lab>. Found an error or have a suggestion? Please open an issue there: <https://github.com/arunp77/Climate-Radiative-Forcing-Lab/issues>.
+Found an error, an unclear explanation or a missing gas? Please write to <arunp77@virta-ai.com>.

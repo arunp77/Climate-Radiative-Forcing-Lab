@@ -2,7 +2,7 @@
   --bg: #f1f5f9; --card: #ffffff; --ink: #172230; --muted: #4d5f72; --line: #d9e2ec;
   --co2: #2b7bd0; --ch4: #e8871e; --n2o: #2e9e5b; --accent: #1f6fc4; --accent-soft: #e6f0fb;
   --font: "Roboto", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --wrap: min(1840px, 97vw);
+  --wrap: min(1440px, 94vw);
 }
 * { box-sizing: border-box; }
 html { color-scheme: light; font-size: 14px; scroll-behavior: smooth; }
@@ -56,9 +56,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .kpi .v { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .kpi .l { color: var(--muted); font-size: .92rem; }
 .kpis.two { grid-template-columns: repeat(2, 1fr); }
-.chart { width: 100%; height: clamp(300px, 50vh, 460px); }
-.chart.tall { height: clamp(340px, 60vh, 580px); }
-.chart.xtall { height: clamp(360px, 64vh, 620px); }
+.chart { width: 100%; height: clamp(280px, 42vh, 390px); }
+.chart.tall { height: clamp(320px, 50vh, 480px); }
+.chart.xtall { height: clamp(340px, 54vh, 520px); }
 pre { margin: 0; white-space: pre-wrap; font-size: .9rem; background: #f3f6fa; padding: 10px; border-radius: 6px; overflow-x: auto; }
 .adv-only { display: none; }
 body.adv .adv-only { display: block; }
