@@ -206,3 +206,10 @@ main.about { grid-template-columns: 300px minmax(0, 1fr); align-items: start; }
 select.wide { width: min(34em, 100%); }
 .player .yr:has(select.wide) { flex: 1 1 280px; }
 .player .yr:has(select.wide) select { flex: 1 1 auto; min-width: 0; }
+
+/* header actions */
+.hdr-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hdr-btn { color: #0a2342; background: #ffd166; font-weight: 700; font-size: .95rem; text-decoration: none; padding: 7px 16px; border-radius: 999px; }
+.hdr-btn:hover { background: #ffe29a; }
+.hdr-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
