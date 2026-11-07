@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Climate Radiative Forcing Lab</title>
+  <meta name="description" content="Interactive, AR6-based radiative forcing balance sheet for students of atmospheric physics." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%232b7bd0'/%3E%3Cpath d='M3 11l3-4 3 2 4-5' stroke='white' stroke-width='1.6' fill='none'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header>
+    <div class="bar">
+    <div class="brand"><h1>Climate Radiative Forcing Lab</h1>
+    <p class="sub">How greenhouse gases, aerosols and clouds change Earth's energy balance</p></div>
+    <label class="mode"><input type="checkbox" id="adv" /> Show equations</label>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" id="tab-balance" aria-selected="true" aria-controls="view-balance">Forcing balance</button>
+      <button role="tab" id="tab-history" aria-selected="false" aria-controls="view-history">History 1850–2019</button>
+      <button role="tab" id="tab-spectra" aria-selected="false" aria-controls="view-spectra">Spectra</button>
+    </nav>
+  </header>
+
+  <main id="view-balance" class="balance" role="tabpanel" aria-labelledby="tab-balance">
+    <p class="howto" style="grid-column:1/-1"><strong>How to use:</strong> drag any slider on the left and the bars, totals and history chart update at once. Start from the 2019 values, or press <em>Pre-industrial</em> or <em>2 × CO₂</em>. Turn on <em>Show equations</em> (top right) to see the formulae behind every bar. <em>Copy link</em> saves your setup in the address.</p>
+    <section class="panel controls" aria-label="Controls">
+      <h2>Atmospheric state</h2>
+      <p class="hint">Defaults are the AR6 values for 2019. Drag a slider; every chart updates immediately.</p>
+
+      <div class="ctl"><label for="co2">CO₂ <output id="co2o"></output> ppm</label>
+        <input type="range" id="co2" min="180" max="1200" step="any" />
+        <details><summary>ℹ About this slider</summary>
+          <p>CO₂ bands are strongly saturated near the line centres; extra CO₂ mostly adds absorption in the band
+          <em>wings</em>, so forcing grows roughly with the <strong>logarithm</strong> of concentration:
+          each doubling adds a similar amount (about 3.9 W m⁻² effective).</p></details></div>
+
+      <div class="ctl"><label for="ch4">CH₄ <output id="ch4o"></output> ppb</label>
+        <input type="range" id="ch4" min="400" max="4000" step="any" />
+        <details><summary>ℹ About this slider</summary>
+          <p>CH₄ is far less saturated, so forcing grows roughly as the <strong>square root</strong> of
+          concentration. It overlaps with N₂O near 7.7–7.8 µm, which the expressions account for.</p></details></div>
+
+      <div class="ctl"><label for="n2o">N₂O <output id="n2oo"></output> ppb</label>
+        <input type="range" id="n2o" min="200" max="600" step="any" />
+        <details><summary>ℹ About this slider</summary>
+          <p>N₂O forcing also grows roughly as the square root of concentration. Its strong bands lie at the
+          <em>edges</em> of the 8–12 µm window, and it persists for about 110 years.</p></details></div>
+
+      <div id="drivers"></div>
+
+      <div class="ctl"><label for="scheme">Forcing equations</label>
+        <select id="scheme">
+          <option value="meinshausen2020">AR6 (Meinshausen et al. 2020)</option>
+          <option value="etminan2016">AR5-era update (Etminan et al. 2016)</option>
+          <option value="myhre1998">Classic TAR (Myhre et al. 1998)</option>
+        </select>
+        <p class="note" id="schemenote"></p></div>
+
+      <div class="btns">
+        <button id="reset">Reset to 2019</button>
+        <button id="pi">Pre-industrial (1750)</button>
+        <button id="x2">2 × CO₂</button>
+        <button id="share">Copy link to this setup</button>
+      </div>
+      <p class="note" id="status" role="status"></p>
+    </section>
+
+    <section class="results">
+      <div class="kpis">
+        <div class="kpi"><span class="v" id="k-wm">–</span><span class="l">W m⁻² · CO₂+CH₄+N₂O+halogens</span></div>
+        <div class="kpi"><span class="v" id="k-tot">–</span><span class="l">W m⁻² · total anthropogenic</span></div>
+        <div class="kpi"><span class="v" id="k-eq">–</span><span class="l">K · <em>equilibrium</em> warming if this forcing were sustained</span></div>
+      </div>
+
+      <div class="panel"><h2>Forcing by agent</h2>
+        <div id="bars" class="chart"></div>
+        <p class="note">Bars: best estimate. Whiskers: AR6 5–95 % range, scaled in proportion to each bar when you move a slider. 
+        Non-gas agents use AR6-based emulators calibrated to reproduce AR6 exactly at default settings (equations: tick “Show equations”).</p></div>
+
+      <div class="panel"><h2>Total anthropogenic forcing, 1850–2019</h2>
+        <div id="ts" class="chart"></div>
+        <p class="note">The black diamond is your current setup placed at 2019 for comparison with the historical AR6 record.</p></div>
+
+      <div class="panel adv-only"><h2>The equations in use</h2>
+        <div id="eqs"></div>
+        <h3>Non-gas agents (emulators)</h3><div id="eq-nonghg"></div>
+        <h3>Equilibrium warming</h3><div id="eq-lambda"></div></div>
+    </section>
+  </main>
+
+  <main id="view-history" class="history" role="tabpanel" aria-labelledby="tab-history" hidden>
+    <section class="panel hist-main">
+      <div class="hist-head">
+        <h2>How the forcing built up, year by year</h2>
+        <div class="netbox" aria-live="polite">Net anthropogenic forcing, <output id="h-year">2019</output>:
+          <strong><output id="h-net">–</output> W m⁻²</strong></div>
+      </div>
+      <p class="howto"><strong>How to use:</strong> press Play or drag the year slider to watch each agent's forcing grow since 1750. Tick <em>Compare with year</em> to hold a second year beside the first.</p>
+      <div id="h-key" class="key" aria-live="polite"></div>
+      <div id="hbars" class="chart xtall"></div>
+      <div class="player">
+        <button id="h-play" aria-label="Play animation">▶ Play</button>
+        <input type="range" id="h-slider" min="1850" max="2019" step="1" aria-label="Year" />
+        <label class="yr">Year <input type="number" id="h-yearbox" min="1850" max="2019" step="1" /></label>
+        <label class="yr">Speed
+          <select id="h-speed"><option value="250">Slow</option><option value="120" selected>Medium</option><option value="50">Fast</option></select></label>
+      </div>
+      <div class="player">
+        <label class="yr"><input type="checkbox" id="h-ghost" /> Compare with year
+          <input type="number" id="h-ghostyear" min="1850" max="2019" step="1" value="1950" /></label>
+        <span class="note">Coloured bars follow the slider; grey bars stay on the comparison year.</span>
+      </div>
+      <p class="note">Axes are fixed so bar lengths can be compared across years. Source: IPCC AR6 WG1 Ch. 7 best estimates, relative to 1750;
+      natural forcings (solar, volcanic) are not shown.</p>
+    </section>
+    <section class="panel hist-info"><h2>About each agent</h2><p class="note">Click an agent for a short explanation.</p><div id="h-info" class="cards"></div></section>
+  </main>
+
+  <main id="view-spectra" class="spectra" role="tabpanel" aria-labelledby="tab-spectra" hidden>
+    <section class="panel sp-main">
+      <p class="howto"><strong>How to use:</strong> <em>Molecule spectra</em> shows what each gas absorbs in a laboratory column. <em>Earth's outgoing spectrum</em> shows what escapes to space; change one gas and read the forcing. Method, limits and ideas to try are below the charts.</p>
+      <div class="seg" role="group" aria-label="Spectra mode">
+        <button id="sp-mode-lab" aria-pressed="true">Molecule spectra</button>
+        <button id="sp-mode-earth" aria-pressed="false">Earth's outgoing spectrum</button>
+      </div>
+
+      <div id="sp-lab">
+        <p class="hint">Click molecules to switch their absorption on and off. Dips are where a gas blocks infrared; the clear region between about 8 and 12.5 µm is the atmospheric window. Most halocarbons absorb right inside it.</p>
+        <div id="sp-gases" class="gasgroups"></div>
+        <div class="player">
+          <label class="yr">Absorber column <input type="range" id="sp-amt" min="0" max="18" step="1" aria-label="Absorber column" /></label>
+          <output id="sp-amt-o" class="amt"></output>
+        </div>
+        <div class="player">
+          <label class="yr">Conditions <select id="sp-cond"></select></label>
+          <label class="yr">Axis <select id="sp-axis"><option value="nu">Wavenumber (cm⁻¹)</option><option value="um">Wavelength (µm)</option></select></label>
+          <label class="yr"><input type="checkbox" id="sp-bands" checked /> Band labels</label>
+          <label class="yr"><input type="checkbox" id="sp-win" checked /> Shade the window</label>
+        </div>
+        <div id="sp-lab-chart" class="chart tall"></div>
+        <p class="note" id="sp-lab-info"></p>
+      </div>
+
+      <div id="sp-earth" hidden>
+        <p class="hint">Radiation leaving the top of the atmosphere, computed line by line (cross-sections for the halocarbons). The dashed curves are blackbody emission at the surface (288 K) and the cold stratosphere (about 220 K). Change one gas at a time and watch which part of the spectrum responds.</p>
+        <div class="player">
+          <label class="yr">Gas <select id="sp-egas"></select></label>
+          <label class="yr">Amount <input type="range" id="sp-eval" min="0" max="5" step="1" aria-label="Amount" /></label>
+          <output id="sp-eval-o" class="amt"></output>
+        </div>
+        <div class="btns">
+          <button id="sp-e1750">1750 atmosphere</button>
+          <button id="sp-e2019">2019 (CO₂+CH₄+N₂O)</button>
+          <button id="sp-e2x">2 × CO₂</button>
+        </div>
+        <div class="player">
+          <span class="yr" id="sp-sky-label">Sky</span>
+          <div class="seg" role="group" aria-labelledby="sp-sky-label">
+            <button id="sp-sky-clear" aria-pressed="false">Clear sky</button>
+            <button id="sp-sky-all" aria-pressed="true">All-sky estimate</button>
+          </div>
+          <label class="yr">Axis <select id="sp-eaxis"><option value="nu">Wavenumber (cm⁻¹)</option><option value="um">Wavelength (µm)</option></select></label>
+          <label class="yr"><input type="checkbox" id="sp-ebands" checked /> Band labels</label>
+          <label class="yr"><input type="checkbox" id="sp-ewin" checked /> Shade the window</label>
+        </div>
+        <p class="note" id="sp-sky-note"></p>
+        <div class="kpis two">
+          <div class="kpi"><span class="v" id="sp-olr">–</span><span class="l" id="sp-olr-l">W m⁻² · outgoing longwave radiation</span></div>
+          <div class="kpi"><span class="v" id="sp-irf">–</span><span class="l">W m⁻² · instantaneous top-of-atmosphere forcing vs the 1750 atmosphere</span></div>
+        </div>
+        <div id="sp-earth-chart" class="chart tall"></div>
+        <h3>Where the extra gas removes radiation</h3>
+        <div id="sp-diff-chart" class="chart"></div>
+        <h3>Forcing against amount</h3>
+        <div id="sp-growth-chart" class="chart"></div>
+        <p class="note" id="sp-re-note"></p>
+        <p class="note" id="sp-growth-note"></p>
+      </div>
+    </section>
+    <section class="panel sp-info">
+      <h2>Method, limits and ideas</h2>
+      <div class="cards">
+      <div class="card">
+      <p class="note"><strong>Data and method.</strong> H₂O, CO₂, CH₄, N₂O and O₃: HITRAN2020 absorption lines (Gordon et al. 2022) with Voigt line shapes. Water vapour also includes the MT_CKD 4.3 continuum (Mlawer et al. 2012; AER). Halocarbons: HITRAN infrared cross-sections for 17 molecules. Layer-by-layer radiative transfer through the 1976 US Standard Atmosphere (idealised water-vapour and ozone profiles; halocarbons uniformly mixed). Only derived spectra are shown.</p>
+      </div><div class="card">
+      <p class="note"><strong>All-sky estimate.</strong> Clouds are represented by one grey deck (cover 0.67) whose opacity is tuned so the model's longwave cloud effect equals the satellite value of 27.9 W m⁻² (CERES EBAF; Loeb et al. 2018). It is a global-mean estimate, not a cloud model, and clear-sky values are shown for comparison.</p>
+      </div><div class="card">
+      <p class="note"><strong>Limitations.</strong> One atmospheric profile, no line mixing, one gas varied at a time, instantaneous forcing at the top of the atmosphere without stratospheric adjustment (so it is smaller than AR6's effective forcing for CO₂). Halocarbon spectra exist only over the wavenumber ranges measured in the laboratory; outside them the lines are left blank, not drawn as transparent.</p>
+      </div><div class="card">
+      <h3>Ideas to try</h3>
+      <ul class="note">
+        <li>Choose CFC-12, HFC-134a or SF₆ and slide the column from 10¹⁶ to 10¹⁹ molecules cm⁻²: the bands sit inside the window, which is why a few parts per trillion matter.</li>
+        <li>Raise CO₂ over many orders of magnitude and watch the 15 µm band flatten while its wings keep growing.</li>
+        <li>In the outgoing spectrum compare the forcing of 1000× today's SF₆ with the straight-line (AR6) prediction: strong bands begin to saturate.</li>
+        <li>Switch between clear sky and the all-sky estimate: window absorbers lose about a third of their forcing to clouds.</li>
+      </ul>
+      </div></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Data: IPCC AR6 WG1 Chapter 7 forcing time series (C. Smith et al.) and Annex III concentrations. The equilibrium-warming
+    figure is ERF ÷ λ with λ = 3.93 ÷ 3 K = 1.31 W m⁻² K⁻¹ (ECS = 3 K); it is <em>not</em> today's observed warming, which is
+    lower because the ocean has not yet equilibrated. A transient model arrives in a later module. Educational use; not a forecast.</p>
+    <p>Free and open for teaching and learning. Spectral data: HITRAN2020 and AER MT_CKD (research and teaching use). Not a forecast.</p>
+  </footer>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
