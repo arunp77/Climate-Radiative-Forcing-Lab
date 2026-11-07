@@ -92,7 +92,7 @@ function render() {
   $("eq-nonghg").innerHTML = NONGHG_TEX.map((t) => `<div class="eq">${renderTex(t)}</div>`).join("") + `<p class="note">${NONGHG_NOTE}</p>`;
 
   const layout = { margin: { t: 10, r: 10, b: 120, l: 70 }, paper_bgcolor: "#fff", plot_bgcolor: "#fff",
-    font: { family: "Roboto, Segoe UI, sans-serif", color: "#1c2733", size: 15 }, showlegend: false };
+    font: { family: "Roboto, Segoe UI, sans-serif", color: "#1c2733", size: 14 }, showlegend: false };
   Plotly.react("bars", [{
     type: "bar", x: rows.map((r) => r.label), y: rows.map((r) => r.value),
     marker: { color: rows.map((r) => COLOURS[r.id]) },
@@ -177,6 +177,8 @@ function initTabs() {
     show(t);
     history.replaceState(null, "", `${location.pathname}${t === "tab-balance" ? location.search : ""}${h}`);
   });
+  document.querySelectorAll<HTMLAnchorElement>("footer a[data-tab]").forEach((a) =>
+    a.addEventListener("click", (e) => { e.preventDefault(); $(a.dataset.tab!).click(); window.scrollTo({ top: 0, behavior: "smooth" }); }));
   const start = tabs.find(([, , h]) => h && h === location.hash);
   if (start) show(start[0]);
 }

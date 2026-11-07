@@ -14,7 +14,7 @@ interface Mark { nu: number; label: string; colour: string }
 
 const WINDOW_NU: [number, number] = [800, 1250]; // about 8-12.5 um: the atmospheric window
 const LAYOUT_BASE = {
-  paper_bgcolor: "#fff", plot_bgcolor: "#fff", font: { family: "Roboto, Segoe UI, sans-serif", color: "#1c2733", size: 15 },
+  paper_bgcolor: "#fff", plot_bgcolor: "#fff", font: { family: "Roboto, Segoe UI, sans-serif", color: "#1c2733", size: 14 },
   margin: { t: 24, r: 20, b: 65, l: 105 },
 };
 const GRID = "#e8edf3";

@@ -37,7 +37,7 @@ export function initHistory(h: History, comps: { id: string; label: string }[]) 
     Plotly.react("hbars", traces, {
       barmode: "group", bargap: on ? 0.22 : 0.35, bargroupgap: 0.04,
       margin: { t: 10, r: 50, b: 65, l: 190 }, paper_bgcolor: "#fff", plot_bgcolor: "#fff",
-      font: { family: "Roboto, Segoe UI, sans-serif", color: "#1c2733", size: 16 }, showlegend: false,
+      font: { family: "Roboto, Segoe UI, sans-serif", color: "#1c2733", size: 15 }, showlegend: false,
       xaxis: { range: [lo, hi], fixedrange: true, title: { text: "ERF since 1750 (W m⁻²)" },
                zeroline: true, zerolinecolor: "#111", zerolinewidth: 2, gridcolor: "#e8edf3" },
       yaxis: { autorange: "reversed", fixedrange: true },

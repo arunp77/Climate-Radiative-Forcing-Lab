@@ -8,12 +8,15 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%232b7bd0'/%3E%3Cpath d='M3 11l3-4 3 2 4-5' stroke='white' stroke-width='1.6' fill='none'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
-<body>
+<body id="top">
   <header>
     <div class="bar">
-    <div class="brand"><h1>Climate Radiative Forcing Lab</h1>
-    <p class="sub">How greenhouse gases, aerosols and clouds change Earth's energy balance</p></div>
-    <label class="mode"><input type="checkbox" id="adv" /> Show equations</label>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#fff" fill-opacity=".14"/><path d="M6 26c5-2 8-9 14-9s9 7 14 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M8 17c4 0 6-5 12-5s8 5 12 5" stroke="#ffd166" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>
+        <div><h1>Climate Radiative Forcing Lab</h1>
+        <p class="sub">How greenhouse gases, aerosols and clouds change Earth's energy balance</p></div>
+      </div>
+      <label class="mode"><input type="checkbox" id="adv" /> Show equations</label>
     </div>
     <nav class="tabs" role="tablist" aria-label="Views">
       <button role="tab" id="tab-balance" aria-selected="true" aria-controls="view-balance">Forcing balance</button>
@@ -200,10 +203,42 @@
   </main>
 
   <footer>
-    <p>Data: IPCC AR6 WG1 Chapter 7 forcing time series (C. Smith et al.) and Annex III concentrations. The equilibrium-warming
-    figure is ERF ÷ λ with λ = 3.93 ÷ 3 K = 1.31 W m⁻² K⁻¹ (ECS = 3 K); it is <em>not</em> today's observed warming, which is
-    lower because the ocean has not yet equilibrated. A transient model arrives in a later module. Educational use; not a forecast.</p>
-    <p>Free and open for teaching and learning. Spectral data: HITRAN2020 and AER MT_CKD (research and teaching use). Not a forecast.</p>
+    <div class="foot">
+      <div class="fcol fabout">
+        <h4>Climate Radiative Forcing Lab</h4>
+        <p>An interactive, open tool for learning how greenhouse gases, aerosols and clouds alter the energy balance of the Earth, from the forcing of each agent to the infrared spectrum that escapes to space.</p>
+      </div>
+      <div class="fcol">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#" data-tab="tab-balance">Forcing balance</a></li>
+          <li><a href="#history" data-tab="tab-history">History 1850–2019</a></li>
+          <li><a href="#spectra" data-tab="tab-spectra">Spectra</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Data and methods</h4>
+        <ul>
+          <li>Forcing: IPCC AR6 WG1 Chapter 7 (Forster et al. 2021; Smith et al.)</li>
+          <li>Lines: HITRAN2020 (Gordon et al. 2022)</li>
+          <li>Water-vapour continuum: MT_CKD 4.3 (Mlawer et al. 2012; AER)</li>
+          <li>Cloud effect: CERES EBAF (Loeb et al. 2018)</li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Good to know</h4>
+        <ul>
+          <li>Equilibrium warming is ERF ÷ λ with λ = 3.93 ÷ 3 = 1.31 W m⁻² K⁻¹ (ECS 3 K). It is not today's observed warming, which is lower because the ocean has not yet equilibrated.</li>
+          <li>Spectral forcings are instantaneous, at the top of the atmosphere.</li>
+          <li>An educational tool, not a forecast.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>Free and open for teaching and learning.</span>
+      <span>Spectral data from HITRAN and AER are used for research and teaching only.</span>
+      <a href="#top" class="totop">Back to top ↑</a>
+    </div>
   </footer>
   <script type="module" src="/src/main.ts"></script>
 </body>
