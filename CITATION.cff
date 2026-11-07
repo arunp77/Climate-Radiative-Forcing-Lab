@@ -8,11 +8,13 @@ authors:
 repository-code: "https://github.com/arunp77/Climate-Radiative-Forcing-Lab"
 url: "https://arunp77.github.io/Climate-Radiative-Forcing-Lab/"
 license: CC-BY-NC-SA-4.0
-version: "0.2.0"
+version: "0.3.0"
 date-released: "2026-11-07"
-abstract: "An open, interactive tool for learning how greenhouse gases, aerosols and clouds change Earth's energy balance: IPCC AR6 effective radiative forcing, line-by-line infrared spectra, warming scenarios and emission metrics."
+abstract: "An open, interactive tool for learning how greenhouse gases, aerosols and clouds change Earth's energy balance: IPCC AR6 effective radiative forcing, line-by-line infrared spectra, stratospheric adjustment, warming scenarios and emission metrics (GWP and GTP)."
 keywords:
   - radiative forcing
   - greenhouse gases
   - climate education
   - atmospheric physics
+  - global warming potential
+  - energy balance model

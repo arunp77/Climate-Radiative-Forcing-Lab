@@ -96,3 +96,33 @@ Global-mean longwave cloud radiative effect 27.9 W m-2 (all-sky OLR 240.1, clear
 constraint: Loeb, N. G. et al. (2018) *Clouds and the Earth's Radiant Energy System (CERES) Energy Balanced and Filled (EBAF) Top-of-Atmosphere
 (TOA) Edition-4.0 Data Product*, J. Climate 31, 895-918, doi:10.1175/JCLI-D-17-0208.1, Table 5 (read from the paper on 2026-11-07).
 Global-mean cloud fraction 0.67 is a round satellite-climatology value, not read from a specific table.
+
+## Observations (added with the Warming tab; `build/build_observations.py`)
+
+| File | Content | Source | Licence | Retrieved |
+|---|---|---|---|---|
+| `raw/obs/HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv` | HadCRUT5 global annual-mean temperature anomaly (1961-1990 baseline) with 95 % interval, 1850-2025 | Met Office Hadley Centre and Climatic Research Unit, University of East Anglia; Morice et al. (2021) doi:10.1029/2019JD032361; <https://www.metoffice.gov.uk/hadobs/hadcrut5/> | Open Government Licence v3.0 (attribution required) | 2026-11-07 |
+| `raw/obs/noaa_co2_annmean_mlo.txt` | Mauna Loa annual-mean CO2, 1959-2025 | NOAA Global Monitoring Laboratory, <https://gml.noaa.gov/ccgg/trends/> | NOAA GML data policy: freely available, please cite | 2026-11-07 |
+
+The web table `web/public/data/observations.json` re-bases HadCRUT5 to the mean of 1850-1900.
+
+## Scenarios (added with the Warming tab; `build/run_fair.py`)
+
+| File | Content | Source | Licence | Retrieved |
+|---|---|---|---|---|
+| `raw/fair_calibration/calibrated_constrained_parameters.csv`, `CH4_lifetime.csv`, `lapsi_scale_factor.csv`, `landuse_scale_factor.csv` | AR6-constrained FaIR v2 posterior parameters (841 members), fair-calibrate v1.4.1; only the **median** of the climate parameters is used | Smith et al. (2024) doi:10.5194/gmd-17-8569-2024; Zenodo doi:10.5281/zenodo.10566813 | CC BY 4.0 | 2026-11-07 |
+| RCMIP v5.1.0 annual-mean emissions, concentrations and forcing (**not stored**; FaIR downloads them on first use, about 48 MB) | SSP emissions and the solar and volcanic forcing | Nicholls et al. (2020) doi:10.5194/gmd-13-5175-2020; Zenodo doi:10.5281/zenodo.4589756 | CC BY-SA 4.0 | 2026-11-07 |
+| `web/public/data/scenarios.json` | Output of FaIR 2.2.5 for SSP1-1.9, 1-2.6, 2-4.5, 3-7.0 and 5-8.5, 1750-2100: forcing by agent, driving forcing, temperature, CO2, CH4 and N2O | `build/run_fair.py` | **Derived from CC BY-SA 4.0 data, so this file is also available under CC BY-SA 4.0** | 2026-11-07 |
+
+One deterministic run per scenario with the FaIR 2.2 default species configuration and the median posterior climate parameters; no ensemble.
+AR6 comparison values (SPM Table SPM.1) are typed in `build/run_fair.py` with their source.
+
+## Emission metrics (`build/build_metrics.py`, `radforce/metrics.py`)
+
+Inputs are the AR6 Table 7.SM.7 species list already in `raw/ar6/metrics_supplement_cleaned.csv` (lifetime, radiative efficiency, AR6 metrics).
+Molar masses are derived from the formulae. The impulse-response and temperature-response constants (Joos et al. 2013; Gasser et al. 2017; the AR6
+two-timescale response) are written out, with sources, in `radforce/metrics.py`. Output: `web/public/data/metrics.json`.
+
+## Stratospheric adjustment (`build/stratospheric_adjustment.py`, `radforce/spectra/adjust.py`)
+
+Computed from the same cached cross-sections and atmosphere as the Spectra tab; no new data. Output: `web/public/data/adjustment.json`.

@@ -58,3 +58,48 @@ All-sky = (1 - 0.67) x clear + 0.67 x [grey deck at 5-6 km, optical depth 0.685]
 ### Halocarbons (17 molecules, HITRAN cross-sections)
 
 All-sky radiative efficiency / AR6 Table 7.SM.7: 1.02-1.31, mean 1.15 (clear sky: 1.62-1.95).  Full table: `docs/halocarbon_check.md`.  The AR6 values were not used in tuning.  The remaining excess over AR6 is plausibly due to the single-profile, uniform-vertical-distribution and one-deck cloud simplifications; stratospheric adjustment would push our values the other way, so it does not explain it.
+
+## Emission metrics (GWP and GTP), against AR6 Table 7.SM.7
+
+Method: AR6 WG1 Section 7.6.1 (impulse-response CO2 of Joos et al. 2013, two-timescale temperature response, climate-carbon feedback of Gasser et al. 2017, AR6 adjustments for CH4 and N2O). Code: `physics/radforce/metrics.py`; tests: `physics/tests/test_metrics.py`.
+
+* 136 halogenated gases with a lifetime of at least a year, recomputed from lifetime, radiative efficiency and a molar mass derived from the formula: all five metrics (GWP-20/100/500, GTP-50/100) within 1.6 % of AR6; 135 of 136 within 1 %.
+* Gases living under a year (and two entries with no usable formula) are not recomputed; AR6 values are shown instead, because the result there is dominated by the carbon-cycle term and by inputs the public table rounds away.
+
+| Gas | metric | this model | AR6 |
+|---|---|---|---|
+| CH4 | GWP-100 | 27.86 | 27.9 |
+| N2O | GWP-100 | 273.4 | 273 |
+| CFC-12 | GWP-100 | 1.248e+04 | 1.25e+04 |
+| HFC-134a | GWP-100 | 1525 | 1530 |
+| SF6 | GWP-100 | 2.521e+04 | 2.52e+04 |
+
+
+## Stratospheric adjustment (fixed dynamical heating)
+
+Method and approximations: `physics/radforce/spectra/adjust.py`; computation: `build/stratospheric_adjustment.py`; tests: `physics/tests/test_adjust.py`, `physics/tests/test_adjustment_results.py`.
+
+| Change (all-sky) | instantaneous, top of atmosphere (W m-2) | stratosphere-adjusted, this model | AR6 stratosphere-adjusted | difference |
+|---|---|---|---|---|
+| 2 × CO₂ (278.3 → 556.6 ppm) | 2.01 | 3.82 | 3.75 | +2 % |
+| CH₄ 1750 → 2019 (729 → 1866 ppb) | 0.51 | 0.55 | 0.64 | -14 % |
+| N₂O 1750 → 2019 (270 → 332 ppb) | 0.19 | 0.20 | 0.20 | -2 % |
+
+For 2 x CO2 the adjustment adds 1.81 W m-2 at the top of the atmosphere and removes 0.48 W m-2 at the tropopause (instantaneous 4.30); both ends agree after adjustment (3.824 and 3.825). With AR6's +5 % tropospheric adjustment the model effective forcing is 4.02 W m-2 against AR6's 3.93. The methane forcing is 14 % below AR6's; the cause was not isolated.
+
+
+## Warming and scenarios (FaIR v2 with the median AR6-constrained climate parameters)
+
+Climate response: three-layer energy balance model, ECS 3.00 K, TCR 1.72 K (AR6: 3 K [2.5-4], 1.8 K [1.4-2.2]). The Python and TypeScript implementations both reproduce the FaIR run (`physics/tests/test_ebm.py`, `web/tests/ebm.test.ts`).
+
+| Scenario | 2081-2100 warming, this run (K) | AR6 SPM Table SPM.1: best estimate [very likely range] |
+|---|---|---|
+| SSP1-1.9 | 1.36 | 1.4 [1.0-1.8] |
+| SSP1-2.6 | 1.73 | 1.8 [1.3-2.4] |
+| SSP2-4.5 | 2.59 | 2.7 [2.1-3.5] |
+| SSP3-7.0 | 3.44 | 3.6 [2.8-4.6] |
+| SSP5-8.5 | 4.27 | 4.4 [3.3-5.7] |
+
+Present-day check: modelled 2011-2020 warming (1850-1900 baseline) 1.00 K; HadCRUT5 1.12 K; AR6 assessed 1.09 K [0.95-1.2]. CO2 in 2024: SSP2-4.5 424.4 ppm, Mauna Loa 424.6 ppm.
+
+Limits: one deterministic run per scenario (no ensemble spread), global-mean series only, no regional climate.

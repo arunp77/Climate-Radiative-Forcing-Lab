@@ -7,3 +7,4 @@ hitran-api>=1.3 # HAPI: HITRAN line download (build/fetch_hitran.py) and test re
 pytest>=8
 fair>=2.2        # used ONLY as an independent cross-check in tests
 -e .
+markdown>=3.5

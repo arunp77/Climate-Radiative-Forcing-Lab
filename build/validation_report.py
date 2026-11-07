@@ -15,6 +15,11 @@ from radforce.forcing.nonghg import historical_state, non_ghg_erf
 OUT = Path(__file__).resolve().parents[1] / "docs" / "validation.md"
 
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from report_sections import more_sections  # noqa: E402
+
+
 def main() -> None:
     conc, ar6 = ar6_concentrations(), ar6_erf()
     row = ar6.loc[2019]
@@ -97,6 +102,7 @@ def main() -> None:
                   f"{np.max([v['re_clear'] / v['re_ar6'] for v in h['gases'].values()]):.2f}).  Full table: `docs/halocarbon_check.md`.  "
                   "The AR6 values were not used in tuning.  The remaining excess over AR6 is plausibly due to the single-profile, uniform-vertical-"
                   "distribution and one-deck cloud simplifications; stratospheric adjustment would push our values the other way, so it does not explain it."]
+    lines += more_sections()
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text("\n".join(lines))
     print("\n".join(lines))

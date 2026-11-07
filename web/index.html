@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body id="top">
+  <a class="skip" href="#" id="skip">Skip to the main content</a>
   <header>
     <div class="bar">
       <div class="brand">
@@ -22,6 +23,10 @@
       <button role="tab" id="tab-balance" aria-selected="true" aria-controls="view-balance">Forcing balance</button>
       <button role="tab" id="tab-history" aria-selected="false" aria-controls="view-history">History 1850–2019</button>
       <button role="tab" id="tab-spectra" aria-selected="false" aria-controls="view-spectra">Spectra</button>
+      <button role="tab" id="tab-warming" aria-selected="false" aria-controls="view-warming">Warming</button>
+      <button role="tab" id="tab-metrics" aria-selected="false" aria-controls="view-metrics">GWP and GTP</button>
+      <button role="tab" id="tab-glossary" aria-selected="false" aria-controls="view-glossary">Glossary</button>
+      <button role="tab" id="tab-about" aria-selected="false" aria-controls="view-about">About and sources</button>
     </nav>
   </header>
 
@@ -181,6 +186,16 @@
         <p class="note" id="sp-growth-note"></p>
       </div>
     </section>
+    <section class="panel sp-adjust">
+      <h2>Why 2 W m⁻² and not 3.9? A worked example for doubled CO₂</h2>
+      <p class="howto"><strong>What this shows:</strong> the forcing on this tab is an <em>instantaneous</em> value at the top of the atmosphere. IPCC AR6 quotes an <em>effective</em> forcing. The steps between them are computed here with the same radiative-transfer model.</p>
+      <div class="seg" role="group" id="sp-adj-sky" aria-label="Sky for the worked example"><button data-sky="clear" aria-pressed="false">Clear sky</button><button data-sky="all" aria-pressed="true">All-sky estimate</button></div>
+      <div id="sp-adj-chart" class="chart"></div>
+      <p class="note" id="sp-adj-text"></p>
+      <h3>The same steps for methane and nitrous oxide (all-sky, 1750 to 2019)</h3>
+      <div class="tablewrap"><table class="mtable calc"><thead><tr><th scope="col">Change</th><th scope="col" class="r">Instantaneous (W m⁻²)</th><th scope="col" class="r">Stratosphere-adjusted, this model</th><th scope="col" class="r">AR6 stratosphere-adjusted</th><th scope="col" class="r">Difference</th></tr></thead><tbody id="sp-adj-rows"></tbody></table></div>
+      <p class="note"><strong>Method.</strong> Fixed dynamical heating: the surface and troposphere are held fixed and the stratospheric temperatures are changed until each layer's longwave cooling returns to its value in the 1750 atmosphere, so solar and dynamical heating balance it again. Only the longwave is recomputed, absorption cross-sections are kept at their reference-temperature values, and the model has 12 stratospheric layers above 12 km. <strong>What to read into the numbers:</strong> carbon dioxide and nitrous oxide agree with AR6 to about 2 %; the model's methane forcing is about 14 % lower than AR6's. The cause was not isolated (the single idealised profile, the idealised methane vertical profile and band overlap with water vapour are candidates), so treat the methane number as the least certain. The tropospheric adjustment factors (CO₂ +5 %, CH₄ −14 %, N₂O +7 %) are AR6's, not computed here.</p>
+    </section>
     <section class="panel sp-info">
       <h2>Method, limits and ideas</h2>
       <div class="cards">
@@ -189,7 +204,7 @@
       </div><div class="card">
       <p class="note"><strong>All-sky estimate.</strong> Clouds are represented by one grey deck (cover 0.67) whose opacity is tuned so the model's longwave cloud effect equals the satellite value of 27.9 W m⁻² (CERES EBAF; Loeb et al. 2018). It is a global-mean estimate, not a cloud model, and clear-sky values are shown for comparison.</p>
       </div><div class="card">
-      <p class="note"><strong>Limitations.</strong> One atmospheric profile, no line mixing, one gas varied at a time, instantaneous forcing at the top of the atmosphere without stratospheric adjustment (so it is smaller than AR6's effective forcing for CO₂). Halocarbon spectra exist only over the wavenumber ranges measured in the laboratory; outside them the lines are left blank, not drawn as transparent.</p>
+      <p class="note"><strong>Limitations.</strong> One atmospheric profile, no line mixing, one gas varied at a time, instantaneous forcing at the top of the atmosphere without stratospheric adjustment (so it is smaller than AR6's effective forcing for CO₂; the worked example above adds the missing steps). Halocarbon spectra exist only over the wavenumber ranges measured in the laboratory; outside them the lines are left blank, not drawn as transparent.</p>
       </div><div class="card">
       <h3>Ideas to try</h3>
       <ul class="note">
@@ -200,6 +215,118 @@
       </ul>
       </div></div>
     </section>
+  </main>
+
+  <main id="view-warming" class="warming" role="tabpanel" aria-labelledby="tab-warming" hidden>
+    <section class="panel">
+      <h2>From forcing to warming</h2>
+      <p class="howto"><strong>How to use:</strong> pick a scenario, then change the climate sensitivity and the ocean mixing. The model turns the forcing of that scenario into temperature in a fraction of a second, and compares it with thermometer records and with what the IPCC assessed.</p>
+      <div class="player"><span class="yr" id="w-scn-label">Scenario</span><div id="w-scn" class="chips scn" role="group" aria-labelledby="w-scn-label"></div></div>
+      <p class="note" id="w-blurb"></p>
+      <div class="sliders">
+        <div class="ctl"><label for="w-ecs">Equilibrium climate sensitivity <output id="w-ecs-o"></output> K</label>
+          <input type="range" id="w-ecs" min="1.5" max="6" step="0.1" /><p class="note">Warming after CO₂ doubles and the climate has fully settled. AR6: best estimate 3 K, likely 2.5–4 K.</p></div>
+        <div class="ctl"><label for="w-mix">Ocean mixing <output id="w-mix-o"></output></label>
+          <input type="range" id="w-mix" min="0.5" max="2" step="0.05" /><p class="note">How fast heat moves into the deeper ocean. Faster mixing delays surface warming.</p></div>
+      </div>
+      <div class="btns"><button id="w-reset" type="button">Reset to the reference setting</button>
+        <label class="yr"><input type="checkbox" id="w-obs" checked /> Show thermometer record</label>
+        <label class="yr"><input type="checkbox" id="w-ar6" checked /> Show AR6 assessed range for 2081–2100</label></div>
+      <p class="note" id="w-note" role="status"></p>
+    </section>
+    <div class="kpis four">
+      <div class="kpi"><span class="v" id="w-k-now">–</span><span class="l" id="w-k-now-l">K</span></div>
+      <div class="kpi"><span class="v" id="w-k-end">–</span><span class="l" id="w-k-end-l">K</span></div>
+      <div class="kpi"><span class="v" id="w-k-ecs">–</span><span class="l">K · equilibrium climate sensitivity (ECS) of your model</span></div>
+      <div class="kpi"><span class="v" id="w-k-tcr">–</span><span class="l">K · transient climate response (TCR); AR6 best estimate 1.8 K, likely 1.4–2.2 K</span></div>
+    </div>
+    <section class="panel"><h2>Global warming</h2><div id="w-temp" class="chart tall"></div>
+      <p class="note">Thermometer record: HadCRUT5 (Met Office Hadley Centre and University of East Anglia), re-based to 1850–1900. The projections start from the same forcing as the FaIR model; only the way the climate responds changes with your sliders.</p></section>
+    <section class="panel"><h2>Forcing behind the scenario</h2><div id="w-erf" class="chart tall"></div>
+      <p class="note">Effective radiative forcing by agent, relative to 1750. Aerosol cooling shrinks as air pollution is cleaned up, which is why warming can speed up even when CO₂ emissions are flat. Natural forcing (solar, volcanic) is the same in every scenario after 2019 in this tool.</p></section>
+    <section class="panel"><h2>Carbon dioxide</h2><div id="w-co2" class="chart"></div>
+      <p class="note">Observed: NOAA Global Monitoring Laboratory, Mauna Loa annual mean.</p></section>
+    <section class="panel"><h2>How this works, and what it leaves out</h2>
+      <div class="cards">
+        <div class="card"><p class="note"><strong>The model.</strong> A three-layer energy balance model: a thin surface layer exchanging heat with a mid and a deep ocean. It is the temperature part of FaIR v2 (Leach et al. 2021), with the heat capacities and exchange rates set to the median of the AR6-constrained calibration (Smith et al. 2024). ECS is changed by altering the climate-feedback parameter only.</p></div>
+        <div class="card"><p class="note"><strong>The forcing.</strong> From one FaIR run per scenario using RCMIP emissions, with the same median climate parameters. It is a single deterministic run, not the full uncertainty ensemble, so the grey and coloured lines have no uncertainty band. The AR6 assessed range is shown for 2081–2100 instead.</p></div>
+        <div class="card"><p class="note"><strong>Check against AR6.</strong> The reference setting gives 1.36, 1.73, 2.59, 3.44 and 4.27 K for 2081–2100 in the five scenarios, inside the AR6 very likely ranges and 0.1 K below its best estimates. For 2011–2020 it gives 1.00 K, inside the AR6 assessed 0.95–1.20 K but about 0.1 K below the thermometer record (HadCRUT5 1.12 K). ECS is 3.0 K and TCR 1.7 K.</p></div>
+        <div class="card"><p class="note"><strong>Limits.</strong> The sliders change how the climate responds, not the emissions: concentrations and forcing stay as in the FaIR run. There is no regional climate, no weather and no tipping points. Past 2025 these are scenarios, not predictions.</p></div>
+      </div></section>
+  </main>
+
+  <main id="view-metrics" class="metrics" role="tabpanel" aria-labelledby="tab-metrics" hidden>
+    <section class="panel">
+      <h2>Comparing gases: GWP and GTP</h2>
+      <p class="howto"><strong>How to use:</strong> choose a gas to see its global warming potential (GWP) and temperature change potential (GTP) at several time horizons, how they change with the horizon, and where the gas sits among 249 others. The calculator below turns emissions into CO₂-equivalent.</p>
+      <div class="player"><label class="yr">Gas <select id="m-gas" class="wide"></select></label></div>
+      <p class="note" id="m-status"></p>
+      <div class="kpis six">
+        <div class="kpi"><span class="v" id="m-GWP20">–</span><span class="l">GWP-20</span><span class="l" id="m-GWP20-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GWP100">–</span><span class="l">GWP-100</span><span class="l" id="m-GWP100-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GWP500">–</span><span class="l">GWP-500</span><span class="l" id="m-GWP500-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GTP50">–</span><span class="l">GTP-50</span><span class="l" id="m-GTP50-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GTP100">–</span><span class="l">GTP-100</span><span class="l" id="m-GTP100-l"></span></div>
+        <div class="kpi"><span class="v" id="m-life">–</span><span class="l">lifetime</span><span class="l">RE <span id="m-re">–</span> W m⁻² ppb⁻¹</span></div>
+      </div>
+    </section>
+    <section class="panel"><h2>How the metric changes with the time horizon</h2>
+      <div class="player"><label class="yr">Show <select id="m-curve-kind"><option value="gwp">GWP</option><option value="gtp">GTP</option></select></label>
+        <span class="yr" id="m-cmp-label">Compare with</span><div id="m-presets" class="chips" role="group" aria-labelledby="m-cmp-label"></div></div>
+      <div id="m-curve" class="chart tall"></div>
+      <p class="note">Lines are computed here; diamonds are the AR6 table values. A gas that is gone within years (methane) loses most of its GWP as the horizon lengthens; a gas that lasts millennia (SF₆, CF₄) keeps its potency. GWP adds up forcing over the whole horizon, while GTP asks only about the temperature at one moment, so it forgets short-lived gases faster.</p></section>
+    <section class="panel"><h2>Why gases differ: lifetime against radiative efficiency</h2>
+      <div id="m-scatter" class="chart tall"></div>
+      <p class="note">Every gas in AR6 Table 7.SM.7 that has a lifetime and a radiative efficiency. Up and to the right means a stronger absorber that also stays longer, so a higher GWP. Per molecule, halocarbons absorb far more than CO₂ (see the Spectra tab for the reason: they sit in the atmospheric window).</p></section>
+    <section class="panel"><h2>CO₂-equivalent calculator</h2>
+      <div class="player"><label class="yr">Metric <select id="m-calc-metric"><option value="GWP20">GWP-20</option><option value="GWP100" selected>GWP-100</option><option value="GWP500">GWP-500</option><option value="GTP50">GTP-50</option><option value="GTP100">GTP-100</option></select></label></div>
+      <div class="tablewrap"><table class="mtable calc"><thead><tr><th scope="col">Gas</th><th scope="col">Emission (Mt)</th><th scope="col" class="r">Factor</th><th scope="col" class="r">Mt CO₂e</th></tr></thead><tbody id="m-calc-rows"></tbody></table></div>
+      <p class="total" id="m-calc-total" role="status"></p>
+      <div id="m-calc-chart" class="chart"></div>
+      <p class="note">Enter emissions in megatonnes (1 Mt = 10⁹ kg). The bar chart is logarithmic because the gases differ by orders of magnitude. CO₂-equivalent depends on the metric and horizon you pick; there is no single "right" one.</p></section>
+    <section class="panel"><h2>Method and limits</h2>
+      <div class="cards">
+        <div class="card"><p class="note"><strong>Method.</strong> For a 1 kg pulse, the absolute GWP is the forcing added up over the horizon and the absolute GTP is the temperature at the horizon, from a two-timescale climate response. Dividing by the same quantity for CO₂ (Joos et al. 2013 carbon cycle) gives the potential. The implementation follows IPCC AR6 WG1 Section 7.6.1 and includes the climate–carbon feedback, the CH₄ and N₂O adjustments and the ozone terms.</p></div>
+        <div class="card"><p class="note"><strong>Checked against AR6.</strong> CO₂'s absolute values match the AR6 table within 0.1 %. For the 136 halogenated gases with a lifetime of at least a year, all five metrics here fall within 1.6 % of AR6 Table 7.SM.7 (135 of them within 1 %). Methane reproduces 27.9 and nitrous oxide 273.</p></div>
+        <div class="card"><p class="note"><strong>Limits.</strong> Methane uses the non-fossil value (27.9); AR6 gives a higher fossil-methane value (29.8) that includes the CO₂ from its oxidation. Gases living under a year, and two with no usable formula, are shown with AR6 values only. Metrics are conventions for comparing emissions, not predictions of warming.</p></div>
+      </div></section>
+  </main>
+
+  <main id="view-glossary" class="glossary" role="tabpanel" aria-labelledby="tab-glossary" hidden>
+    <section class="panel">
+      <h2>Glossary and naming guide</h2>
+      <p class="howto"><strong>How to use:</strong> decode a gas name in the first box, look up any of the 22 molecules used on the Spectra tab in the table, or search the terms below by word or topic.</p>
+
+      <h3>Decode a halocarbon name</h3>
+      <p class="note">CFC-11, HCFC-22, HFC-134a and PFC-218 all follow one rule: <strong>add 90 to the number</strong>. The three digits you get are the number of carbon, hydrogen and fluorine atoms. Every other bond on the carbons holds chlorine.</p>
+      <div class="player">
+        <label class="yr">Number <input type="text" id="gl-code" inputmode="numeric" value="134a" maxlength="5" aria-describedby="gl-decoded" style="width:6em" /></label>
+        <span id="gl-decoded" class="decoded" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3 style="margin-top:0">The molecules on the Spectra tab</h3>
+      <div class="tablewrap">
+        <table class="mtable">
+          <thead><tr><th></th><th scope="col">Name</th><th scope="col">Formula</th><th scope="col">Family</th><th scope="col">Lifetime</th><th scope="col">RE (W m⁻² ppb⁻¹)</th><th scope="col">GWP-100</th><th scope="col">Where it comes from</th></tr></thead>
+          <tbody id="gl-mols"></tbody>
+        </table>
+      </div>
+      <p class="note">RE is the radiative efficiency, GWP-100 the global warming potential over 100 years. Values are from IPCC AR6 Table 7.SM.7. They are defined in the glossary below.</p>
+    </section>
+
+    <section class="panel">
+      <h3 style="margin-top:0">Terms</h3>
+      <div class="player"><label class="yr">Search <input type="search" id="gl-search" placeholder="e.g. window, ERF, lifetime" style="width:18em" /></label><span class="note" id="gl-count" role="status"></span></div>
+      <div id="gl-cats" class="chips" role="group" aria-label="Filter by topic"></div>
+      <dl id="gl-terms" class="terms"></dl>
+    </section>
+  </main>
+
+  <main id="view-about" class="about" role="tabpanel" aria-labelledby="tab-about" hidden>
+    <aside class="panel docnav" aria-label="Documents"><h2>Documents</h2><div id="ab-nav" class="navlist"></div></aside>
+    <article class="panel doc" id="ab-body" aria-live="polite">Loading…</article>
   </main>
 
   <footer>
@@ -214,12 +341,17 @@
           <li><a href="#" data-tab="tab-balance">Forcing balance</a></li>
           <li><a href="#history" data-tab="tab-history">History 1850–2019</a></li>
           <li><a href="#spectra" data-tab="tab-spectra">Spectra</a></li>
+          <li><a href="#warming" data-tab="tab-warming">Warming</a></li>
+          <li><a href="#metrics" data-tab="tab-metrics">GWP and GTP</a></li>
+          <li><a href="#glossary" data-tab="tab-glossary">Glossary</a></li>
+          <li><a href="#about" data-tab="tab-about">About, validation and references</a></li>
         </ul>
       </div>
       <div class="fcol">
         <h4>Data and methods</h4>
         <ul>
           <li>Forcing: IPCC AR6 WG1 Chapter 7 (Forster et al. 2021; Smith et al.)</li>
+          <li>Warming: FaIR v2 (Leach et al. 2021); HadCRUT5; NOAA Mauna Loa</li>
           <li>Lines: HITRAN2020 (Gordon et al. 2022)</li>
           <li>Water-vapour continuum: MT_CKD 4.3 (Mlawer et al. 2012; AER)</li>
           <li>Cloud effect: CERES EBAF (Loeb et al. 2018)</li>
@@ -237,6 +369,8 @@
     <div class="legal">
       <span>Free and open for teaching and learning.</span>
       <span>Spectral data from HITRAN and AER are used for research and teaching only.</span>
+      <a href="https://github.com/arunp77/Climate-Radiative-Forcing-Lab" target="_blank" rel="noopener noreferrer">Source code</a>
+      <a href="https://github.com/arunp77/Climate-Radiative-Forcing-Lab/issues" target="_blank" rel="noopener noreferrer">Report an issue</a>
       <a href="#top" class="totop">Back to top ↑</a>
     </div>
   </footer>

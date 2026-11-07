@@ -1,0 +1,183 @@
+<h1>Getting the HITRAN data</h1>
+<p><strong>You do not need this to use the site or to run the web app.</strong> The repository already contains the derived spectra
+(<code>web/public/data/spectra/</code>). You only need HITRAN if you want to <strong>rebuild</strong> those spectra, for example to add a
+molecule or change the atmosphere.</p>
+<p>The raw HITRAN files are not in the repository, because the HITRAN terms allow free research and teaching use but do not
+allow redistributing the raw data. Each person downloads them with their own account.</p>
+<p>There are two kinds of data. Both end up under <code>data/raw/</code>, which git ignores.</p>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>For which molecules</th>
+<th>How you get it</th>
+<th>Goes to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Line lists</strong> (individual spectral lines)</td>
+<td>H₂O, CO₂, O₃, N₂O, CH₄ (CF₄ is fetched too but not used for the lines viewer)</td>
+<td>Automatic, with a script</td>
+<td><code>data/raw/hitran/</code></td>
+</tr>
+<tr>
+<td><strong>Infrared cross-sections</strong> (<code>.xsc</code> files)</td>
+<td>The 17 halocarbons</td>
+<td>Manual download from the HITRAN website</td>
+<td><code>data/raw/hitran_xsec/&lt;MOLECULE&gt;/</code></td>
+</tr>
+</tbody>
+</table>
+<h2>1. Line lists (automatic)</h2>
+<pre><code class="language-bash">source .venv/bin/activate
+pip install hitran-api            # also in physics/requirements.txt
+python build/fetch_hitran.py
+</code></pre>
+<p>The script uses HAPI, the official HITRAN Python interface, to download H₂O (4 isotopologues), CO₂ (4), O₃ (3), N₂O (4),
+CH₄ (2) and CF₄ (1) between 10 and 4000 cm⁻¹. It skips tables that already exist. It takes a few minutes and needs an
+internet connection. At the time of writing it works without logging in; if HITRAN changes that, log in at
+<a href="https://hitran.org">https://hitran.org</a> and follow the HAPI instructions on the site to add an API key.</p>
+<h2>2. Cross-sections for the halocarbons (manual)</h2>
+<ol>
+<li>Create a free account at <a href="https://hitran.org">https://hitran.org</a> and log in.</li>
+<li>Open the <strong>Cross-sections</strong> (IR absorption cross-sections) page, at <a href="https://hitran.org/xsc/">https://hitran.org/xsc/</a>.</li>
+<li>For each molecule in the table below, select it and download <strong>all</strong> of its files (the whole data set, every
+   temperature and pressure). A download is a zip file that contains many <code>.xsc</code> files and one <code>.bib</code> file (the
+   citation). If the site offers one archive for everything, use it.</li>
+<li>Unzip each archive into its own folder with the exact name in the right-hand column, so that the layout is:</li>
+</ol>
+<pre><code>data/raw/hitran_xsec/
+├── CFC-11/   CCl3F_191.5K-49.8Torr_710.0-1290.0_115.xsc  ...  one .bib
+├── CFC-12/   ...
+└── ... (17 folders)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Molecule</th>
+<th>Also called</th>
+<th>Folder name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CCl₃F</td>
+<td>CFC-11</td>
+<td><code>CFC-11</code></td>
+</tr>
+<tr>
+<td>CCl₂F₂</td>
+<td>CFC-12</td>
+<td><code>CFC-12</code></td>
+</tr>
+<tr>
+<td>C₂Cl₃F₃</td>
+<td>CFC-113</td>
+<td><code>CFC-113</code></td>
+</tr>
+<tr>
+<td>C₂Cl₂F₄</td>
+<td>CFC-114</td>
+<td><code>CFC-114</code></td>
+</tr>
+<tr>
+<td>CHClF₂</td>
+<td>HCFC-22</td>
+<td><code>HCFC-22</code></td>
+</tr>
+<tr>
+<td>CH₃CCl₂F</td>
+<td>HCFC-141b</td>
+<td><code>HCFC-141b</code></td>
+</tr>
+<tr>
+<td>CH₃CClF₂</td>
+<td>HCFC-142b</td>
+<td><code>HCFC-142b</code></td>
+</tr>
+<tr>
+<td>CHF₃</td>
+<td>HFC-23</td>
+<td><code>HFC-23</code></td>
+</tr>
+<tr>
+<td>CH₂F₂</td>
+<td>HFC-32</td>
+<td><code>HFC-32</code></td>
+</tr>
+<tr>
+<td>C₂HF₅</td>
+<td>HFC-125</td>
+<td><code>HFC-125</code></td>
+</tr>
+<tr>
+<td>CH₂FCF₃</td>
+<td>HFC-134a</td>
+<td><code>HFC-134a</code></td>
+</tr>
+<tr>
+<td>CH₃CF₃</td>
+<td>HFC-143a</td>
+<td><code>HFC-143a</code></td>
+</tr>
+<tr>
+<td>SF₆</td>
+<td>sulphur hexafluoride</td>
+<td><code>SF6</code></td>
+</tr>
+<tr>
+<td>CF₄</td>
+<td>PFC-14, tetrafluoromethane</td>
+<td><code>CF4</code></td>
+</tr>
+<tr>
+<td>C₂F₆</td>
+<td>PFC-116, hexafluoroethane</td>
+<td><code>C2F6</code></td>
+</tr>
+<tr>
+<td>C₃F₈</td>
+<td>PFC-218, octafluoropropane</td>
+<td><code>C3F8</code></td>
+</tr>
+<tr>
+<td>CCl₄</td>
+<td>carbon tetrachloride</td>
+<td><code>CCl4</code></td>
+</tr>
+</tbody>
+</table>
+<p>The code reads the temperature, pressure and wavenumber range from the first line of each <code>.xsc</code> file, so the file names
+do not matter, only that the files sit inside the right folder. Keep only the <code>.xsc</code> and <code>.bib</code> files; you can delete
+any <code>.html</code> or other files that came in the archive.</p>
+<p>The build expects all 17 folders; it is not written to skip a missing one (it stops with a <code>KeyError</code>). If you only want some molecules, remove the others from <code>GAS_INFO</code> in <code>build/build_spectra.py</code>. To check what you have:</p>
+<pre><code class="language-bash">python - &lt;&lt;'PY'
+from radforce.spectra.xsec import XscLibrary
+lib = XscLibrary()
+for m in lib.molecules():
+    lo, hi = lib.coverage(m)
+    print(f&quot;{m:10s} {len(lib.files[m]):4d} files  {lo:7.1f}-{hi:7.1f} cm-1&quot;)
+PY
+</code></pre>
+<p>Expect 17 molecules and about 650 files in total (about 1.3 GB). A few older data sets (CFC-113, CFC-114, HCFC-142b,
+HFC-143a, C₃F₈) did not record the pressure; the code treats them as roughly 1 atm and says so on the Spectra tab.</p>
+<h2>3. Build the spectra</h2>
+<pre><code class="language-bash">python build/build_spectra.py      # about 30 minutes, under 2 GB of memory
+python build/halocarbon_check.py
+python build/cloud_sensitivity.py
+</code></pre>
+<p><code>build_spectra.py</code> writes the JSON tables in <code>web/public/data/spectra/</code>. Commit those, not the raw HITRAN files.</p>
+<h2>4. Water-vapour continuum</h2>
+<p>The MT_CKD 4.3 continuum file (<code>data/raw/mtckd/absco-ref_wv-mt-ckd.nc</code>) is already in the repository with its licence
+(<code>LICENSE.md</code>). If you ever need it again, it is distributed by Atmospheric and Environmental Research (AER) in the
+MT_CKD repository on GitHub (<code>AER-RC/MT_CKD_H2O</code>).</p>
+<h2>Citing HITRAN</h2>
+<p>Please cite both when you publish or teach with derived data:</p>
+<ul>
+<li>Gordon, I. E. et al. (2022), <em>The HITRAN2020 molecular spectroscopic database</em>, J. Quant. Spectrosc. Radiat. Transf.
+  277, 107949.</li>
+<li>Kochanov, R. V. et al. (2016), <em>HITRAN Application Programming Interface (HAPI)</em>, J. Quant. Spectrosc. Radiat.
+  Transf. 177, 15–30.</li>
+</ul>
+<p>Each cross-section folder also carries its own <code>.bib</code> file with the original laboratory references.</p>

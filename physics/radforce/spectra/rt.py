@@ -46,3 +46,32 @@ def upward_flux(nu, tau_layers, T_layers, T_surface, n_angles: int = 4, surface_
 def total(nu, spectral_flux) -> float:
     """Integrate a spectral flux over the grid -> W m-2 (trapezoid rule)."""
     return float(np.trapezoid(spectral_flux, nu))
+
+
+def net_flux_profile(nu, tau_layers, T_layers, T_surface, n_angles: int = 4, surface_emissivity: float = 1.0):
+    """Spectrally integrated upward, downward and net flux at every layer interface, W m-2.
+
+    Same physics and layer ordering as ``upward_flux`` (``tau_layers`` runs from the surface upward; each layer is
+    isothermal).  Interface k lies below layer k, so interface 0 is the surface and interface n_layers the top of the
+    atmosphere.  Returns ``(up, down, net)``, each of length n_layers + 1, with ``net = up - down``.
+    """
+    tau = np.asarray(tau_layers, dtype=np.float64)
+    nL, nN = tau.shape
+    B = [planck.radiance(nu, T) for T in T_layers]
+    Bs = surface_emissivity * planck.radiance(nu, T_surface)
+    mus, ws = _gauss_mu(n_angles)
+    up = np.zeros(nL + 1)
+    down = np.zeros(nL + 1)
+    for mu, w in zip(mus, ws):
+        I = Bs.copy()
+        up[0] += 2.0 * np.pi * w * mu * np.trapezoid(I, nu)
+        for k in range(nL):                                  # radiation climbing through layer k
+            t = np.exp(-tau[k] / mu)
+            I = I * t + B[k] * (1.0 - t)
+            up[k + 1] += 2.0 * np.pi * w * mu * np.trapezoid(I, nu)
+        I = np.zeros(nN)                                     # nothing arrives from space
+        for k in range(nL - 1, -1, -1):                      # radiation descending through layer k
+            t = np.exp(-tau[k] / mu)
+            I = I * t + B[k] * (1.0 - t)
+            down[k] += 2.0 * np.pi * w * mu * np.trapezoid(I, nu)
+    return up, down, up - down

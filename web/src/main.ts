@@ -7,6 +7,11 @@ import type { History } from "./history";
 import { nonGhgErf, type NonGhgParams, type DriverState } from "./nonghg";
 import { ALL_DRIVERS, GROUPS } from "./drivers";
 import { initSpectra } from "./spectraView";
+import { initGlossary } from "./glossaryView";
+import { initWarming } from "./warmView";
+import { initAdjust } from "./adjustView";
+import { initAbout } from "./aboutView";
+import { initMetrics } from "./metricsView";
 
 interface Component { id: string; label: string; best: number; low: number; high: number }
 interface Balance {
@@ -159,29 +164,66 @@ async function main() {
   render();
 }
 
+// Each tab: [button id, panel id, URL hash, optional loader that runs once, the first time the tab is shown]
+type TabDef = readonly [string, string, string, (() => Promise<void>) | undefined];
 function initTabs() {
-  const tabs = [["tab-balance", "view-balance", ""], ["tab-history", "view-history", "#history"], ["tab-spectra", "view-spectra", "#spectra"]] as const;
-  let spectraStarted = false;
+  const tabs: TabDef[] = [
+    ["tab-balance", "view-balance", "", undefined],
+    ["tab-history", "view-history", "#history", undefined],
+    ["tab-spectra", "view-spectra", "#spectra", async () => {
+      void initAdjust().catch((e) => { $("sp-adj-text").textContent = `Could not load: ${String(e)}`; });
+      await initSpectra().catch((e) => { $("sp-lab-info").textContent = `Could not load spectra data: ${String(e)}`; });
+    }],
+    ["tab-warming", "view-warming", "#warming", () => initWarming().catch((e) => { $("w-note").textContent = `Could not load: ${String(e)}`; })],
+    ["tab-metrics", "view-metrics", "#metrics", () => initMetrics().catch((e) => { $("m-status").textContent = `Could not load: ${String(e)}`; })],
+    ["tab-glossary", "view-glossary", "#glossary", () => initGlossary().catch((e) => { $("gl-count").textContent = `Could not load: ${String(e)}`; })],
+    ["tab-about", "view-about", "#about", () => initAbout()],
+  ];
+  const started = new Set<string>();
   const show = (active: string) => {
     for (const [t, v] of tabs) {
       $(t).setAttribute("aria-selected", String(t === active));
+      $(t).tabIndex = t === active ? 0 : -1;
       $(v).hidden = t !== active;
     }
-    if (active === "tab-spectra" && !spectraStarted) {
-      spectraStarted = true; // load the (large) spectra tables only when first needed
-      initSpectra().catch((e) => { $("sp-lab-info").textContent = `Could not load spectra data: ${String(e)}`; });
-    }
+    const def = tabs.find((d) => d[0] === active)!;
+    if (def[3] && !started.has(active)) { started.add(active); void def[3](); }   // load heavy tables only when first needed
     window.dispatchEvent(new Event("resize")); // let Plotly size charts that were hidden
   };
   for (const [t, , h] of tabs) $(t).addEventListener("click", () => {
     show(t);
     history.replaceState(null, "", `${location.pathname}${t === "tab-balance" ? location.search : ""}${h}`);
   });
+  // arrow keys move between tabs (WAI-ARIA tabs pattern)
+  $("tab-balance").parentElement!.addEventListener("keydown", (e) => {
+    const i = tabs.findIndex((d) => document.activeElement?.id === d[0]);
+    if (i < 0 || !["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
+    e.preventDefault();
+    const j = e.key === "Home" ? 0 : e.key === "End" ? tabs.length - 1 : (i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    $(tabs[j][0]).focus(); $(tabs[j][0]).click();
+  });
+  $("skip").addEventListener("click", (e) => {
+    e.preventDefault();
+    const panel = document.querySelector<HTMLElement>('[role="tabpanel"]:not([hidden])');
+    if (panel) { panel.tabIndex = -1; panel.focus(); }
+  });
   document.querySelectorAll<HTMLAnchorElement>("footer a[data-tab]").forEach((a) =>
     a.addEventListener("click", (e) => { e.preventDefault(); $(a.dataset.tab!).click(); window.scrollTo({ top: 0, behavior: "smooth" }); }));
-  const start = tabs.find(([, , h]) => h && h === location.hash);
-  if (start) show(start[0]);
+  const start = tabs.find((d) => d[2] && d[2] === location.hash);
+  if (start) show(start[0]); else show("tab-balance");
 }
+// Plotly draws SVG that screen readers cannot read, so every chart gets a text label; the data are also in the hover text and tables
+const CHART_LABELS: Record<string, string> = {
+  bars: "Bar chart of effective radiative forcing by agent", ts: "Line chart of total anthropogenic forcing 1850 to 2019",
+  hbars: "Horizontal bar chart of forcing by agent for the selected year", "sp-lab-chart": "Spectrum of the selected molecules: transmission against wavenumber",
+  "sp-earth-chart": "Spectrum of radiation leaving the top of the atmosphere", "sp-diff-chart": "Change in outgoing radiation caused by the extra gas",
+  "sp-growth-chart": "Forcing against amount of the selected gas", "sp-adj-chart": "Bar chart of the steps from instantaneous to effective forcing for doubled CO2",
+  "w-temp": "Line chart of global warming for the selected scenario with the thermometer record", "w-erf": "Line chart of forcing by agent for the selected scenario",
+  "w-co2": "Line chart of carbon dioxide concentration for the scenarios with the observed record", "m-curve": "Line chart of GWP or GTP against time horizon",
+  "m-scatter": "Scatter plot of radiative efficiency against lifetime for all gases", "m-calc-chart": "Bar chart of CO2-equivalent emissions by gas",
+};
+for (const [id, label] of Object.entries(CHART_LABELS)) { const el = document.getElementById(id); if (el) { el.setAttribute("role", "img"); el.setAttribute("aria-label", label); } }
+
 main().catch((e) => {
   const p = document.createElement("p"); // textContent, never HTML: error text is not trusted
   p.style.cssText = "color:#b00020;padding:16px"; p.textContent = `Failed to load: ${String(e)}`;
