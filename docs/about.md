@@ -1,6 +1,6 @@
 # About this site
 
-**Climate Radiative Forcing Lab** is a free, open tool for learning how greenhouse gases, aerosols and clouds change the energy balance of the Earth. It runs entirely in your browser; there is no account, no tracking and nothing is sent anywhere.
+**Climate Radiative Forcing Lab** is a free, open tool for learning how greenhouse gases, aerosols and clouds change the energy balance of the Earth. It runs entirely in your browser; there is no account and the calculations never leave your device. Anonymous visit statistics are collected with GoatCounter and, only if you accept the cookie banner, Google Analytics.
 
 ## What is in it
 

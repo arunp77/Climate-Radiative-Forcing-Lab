@@ -1,7 +1,7 @@
 # Climate Radiative Forcing Lab
 
 **An open, interactive tool for learning how greenhouse gases, aerosols and clouds change the energy balance of the Earth.**
-It is aimed at undergraduate and postgraduate students, teachers and anyone curious about atmospheric physics. It runs entirely in the browser: no account, no tracking, no server.
+It is aimed at undergraduate and postgraduate students, teachers and anyone curious about atmospheric physics. It runs entirely in the browser: no account, no server (anonymous visit statistics only: GoatCounter, plus Google Analytics if you accept cookies).
 
 **Live site: <https://arunp77.github.io/Climate-Radiative-Forcing-Lab/>**
 
