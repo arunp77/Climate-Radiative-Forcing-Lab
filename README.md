@@ -14,7 +14,7 @@ It is aimed at undergraduate and postgraduate students, teachers and anyone curi
 | **Spectra** | See the infrared absorption of **22 molecules** (H₂O, CO₂, CH₄, N₂O, O₃ and 17 halocarbons), the spectrum leaving the Earth, saturation, a clear-sky / all-sky switch, and a worked example of why doubled CO₂ is about 2 W m⁻² instantaneously but 3.9 W m⁻² effectively. | HITRAN2020, MT_CKD continuum, own line-by-line and radiative-transfer code |
 | **Warming** | Turn the forcing of five SSP scenarios into temperature, change the climate sensitivity and ocean mixing, and compare with thermometer records and the IPCC's assessed range. | FaIR v2, three-layer energy balance model, HadCRUT5, NOAA Mauna Loa |
 | **GWP and GTP** | Compare 249 gases at 20, 100 and 500 years, see why lifetime and absorption decide the metric, and convert emissions to CO₂-equivalent. | IPCC AR6 method, recomputed |
-| **Glossary** | Decode names such as CFC-11 or HFC-134a, look up the 22 molecules, and search about 80 terms. | IPCC AR6 and the Montreal Protocol texts |
+| **Glossary** | Decode names such as CFC-11 or HFC-134a, look up the 22 molecules, and search over 100 terms. | IPCC AR6 and the Montreal Protocol texts |
 | **About and sources** | Read the validation report, the cloud-model sensitivity study, the halocarbon check, the references and this project's notes. | |
 
 ## How accurate is it?

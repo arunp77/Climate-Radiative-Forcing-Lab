@@ -213,3 +213,10 @@ select.wide { width: min(34em, 100%); }
 .hdr-btn:hover { background: #ffe29a; }
 .hdr-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* key-terms boxes */
+details.termsbox { margin: 0 0 14px; border: 1px solid #b9d0ea; border-radius: 10px; background: #f6faff; padding: 8px 14px; }
+details.termsbox > summary { font-weight: 700; color: #0f4c8a; cursor: pointer; font-size: 1rem; }
+details.termsbox[open] > summary { margin-bottom: 8px; }
+details.termsbox dl.terms { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); max-height: 55vh; overflow-y: auto; padding-right: 4px; }
+details.termsbox .term { background: #fff; }

@@ -19,7 +19,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Climate Radiative Forcing Lab</title>
-  <meta name="description" content="Interactive, AR6-based radiative forcing balance sheet for students of atmospheric physics." />
+  <meta name="description" content="A free, interactive lab on how greenhouse gases, aerosols and clouds change Earth's energy balance: IPCC AR6 forcing, infrared spectra of 22 molecules, warming scenarios, GWP and GTP, and a glossary." />
+  <meta property="og:title" content="Climate Radiative Forcing Lab" />
+  <meta property="og:description" content="Interactive tool for learning how greenhouse gases, aerosols and clouds change Earth's energy balance." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%232b7bd0'/%3E%3Cpath d='M3 11l3-4 3 2 4-5' stroke='white' stroke-width='1.6' fill='none'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
@@ -50,6 +52,8 @@
 
   <main id="view-balance" class="balance" role="tabpanel" aria-labelledby="tab-balance">
     <p class="howto" style="grid-column:1/-1"><strong>How to use:</strong> drag any slider on the left and the bars, totals and history chart update at once. Start from the 2019 values, or press <em>Pre-industrial</em> or <em>2 × CO₂</em>. Turn on <em>Show equations</em> (top right) to see the formulae behind every bar. <em>Copy link</em> saves your setup in the address.</p>
+<details style="grid-column:1/-1" class="termsbox" data-terms="Effective radiative forcing (ERF)|Radiative forcing (RF)|Pre-industrial and the 1750 baseline|W m⁻² (watts per square metre)|ppm, ppb, ppt|WMGHG (well-mixed greenhouse gases)|Halocarbon / halogenated gas|Aerosol|Aerosol–radiation interactions (ERFari)|Aerosol–cloud interactions (ERFaci)|Black carbon (BC) and organic carbon (OC)|SO₂ (sulphur dioxide)|NH₃ (ammonia)|NOₓ (nitrogen oxides)|CO (carbon monoxide)|VOC (volatile organic compounds)|Ozone (O₃)|ODS (ozone-depleting substance)|EESC (equivalent effective stratospheric chlorine)|Albedo and land-use change|Contrails and aviation cirrus|Anthropogenic|Emulator|Forcing equations (Meinshausen 2020, Etminan 2016, Myhre 1998)|Tropospheric rapid adjustments|ECS (equilibrium climate sensitivity)|Instantaneous versus equilibrium|Climate feedback parameter (λ)|AR6"><summary>Key terms on this tab (29)</summary><dl class="terms"></dl></details>
+
     <section class="panel controls" aria-label="Controls">
       <h2>Atmospheric state</h2>
       <p class="hint">Defaults are the AR6 values for 2019. Drag a slider; every chart updates immediately.</p>
@@ -78,8 +82,8 @@
       <div class="ctl"><label for="scheme">Forcing equations</label>
         <select id="scheme">
           <option value="meinshausen2020">AR6 (Meinshausen et al. 2020)</option>
-          <option value="etminan2016">AR5-era update (Etminan et al. 2016)</option>
-          <option value="myhre1998">Classic TAR (Myhre et al. 1998)</option>
+          <option value="etminan2016">Intermediate update (Etminan et al. 2016)</option>
+          <option value="myhre1998">Classic formula of the IPCC Third Assessment Report (Myhre et al. 1998)</option>
         </select>
         <p class="note" id="schemenote"></p></div>
 
@@ -123,6 +127,8 @@
           <strong><output id="h-net">–</output> W m⁻²</strong></div>
       </div>
       <p class="howto"><strong>How to use:</strong> press Play or drag the year slider to watch each agent's forcing grow since 1750. Tick <em>Compare with year</em> to hold a second year beside the first.</p>
+<details class="termsbox" data-terms="Effective radiative forcing (ERF)|Pre-industrial and the 1750 baseline|Natural forcing|Anthropogenic|Aerosol|Aerosol–radiation interactions (ERFari)|Aerosol–cloud interactions (ERFaci)|Black carbon on snow|Albedo and land-use change|Contrails and aviation cirrus|Ozone (O₃)|Halocarbon / halogenated gas|AR6"><summary>Key terms on this tab (13)</summary><dl class="terms"></dl></details>
+
       <div id="h-key" class="key" aria-live="polite"></div>
       <div id="hbars" class="chart xtall"></div>
       <div class="player">
@@ -146,6 +152,8 @@
   <main id="view-spectra" class="spectra" role="tabpanel" aria-labelledby="tab-spectra" hidden>
     <section class="panel sp-main">
       <p class="howto"><strong>How to use:</strong> <em>Molecule spectra</em> shows what each gas absorbs in a laboratory column. <em>Earth's outgoing spectrum</em> shows what escapes to space; change one gas and read the forcing. Method, limits and ideas to try are below the charts.</p>
+<details class="termsbox" data-terms="Wavenumber (cm⁻¹)|Wavelength (µm)|Infrared (thermal) radiation|Blackbody and the Planck function|Atmospheric window|Absorption band and line|Vibrational modes (bend and stretch)|Cross-section σ (cm² per molecule)|Column (molecules cm⁻²)|Optical depth (τ) and transmission|Line broadening (Doppler, pressure, Voigt)|Saturation and the curve of growth|Water-vapour continuum|MT_CKD|HITRAN|Radiative transfer and line-by-line calculation|Schwarzschild equation|Standard atmosphere|Troposphere and stratosphere|Tropopause and lapse rate|TOA (top of the atmosphere)|OLR (outgoing longwave radiation)|Clear sky and all sky|Cloud radiative effect (CRE)|CERES|Radiative efficiency (RE)|Instantaneous radiative forcing (IRF)|Stratospheric adjustment|SARF (stratosphere-adjusted radiative forcing)|Tropospheric rapid adjustments|Effective radiative forcing (ERF)|CFC (chlorofluorocarbon)|HCFC (hydrochlorofluorocarbon)|HFC (hydrofluorocarbon)|PFC (perfluorocarbon)|SF₆ (sulphur hexafluoride)|Dobson unit (DU)|atm, hPa and Torr (pressure)|ppm, ppb, ppt|W m⁻² (watts per square metre)"><summary>Key terms on this tab (40)</summary><dl class="terms"></dl></details>
+
       <div class="seg" role="group" aria-label="Spectra mode">
         <button id="sp-mode-lab" aria-pressed="true">Molecule spectra</button>
         <button id="sp-mode-earth" aria-pressed="false">Earth's outgoing spectrum</button>
@@ -239,6 +247,8 @@
     <section class="panel">
       <h2>From forcing to warming</h2>
       <p class="howto"><strong>How to use:</strong> pick a scenario, then change the climate sensitivity and the ocean mixing. The model turns the forcing of that scenario into temperature in a fraction of a second, and compares it with thermometer records and with what the IPCC assessed.</p>
+<details class="termsbox" data-terms="Effective radiative forcing (ERF)|SSP (Shared Socioeconomic Pathway)|FaIR|Reduced-complexity model|Two-layer (energy balance) model|ECS (equilibrium climate sensitivity)|TCR (transient climate response)|Climate feedback parameter (λ)|Ocean heat uptake|Ocean mixing|Temperature anomaly|GMST / GSAT|Natural forcing|Aerosol|Anthropogenic|HadCRUT5|NOAA and the Mauna Loa record|RCMIP|CMIP6|AR6|Committed warming|Paris Agreement|K versus °C"><summary>Key terms on this tab (23)</summary><dl class="terms"></dl></details>
+
       <div class="player"><span class="yr" id="w-scn-label">Scenario</span><div id="w-scn" class="chips scn" role="group" aria-labelledby="w-scn-label"></div></div>
       <p class="note" id="w-blurb"></p>
       <div class="sliders">
@@ -277,14 +287,28 @@
     <section class="panel">
       <h2>Comparing gases: GWP and GTP</h2>
       <p class="howto"><strong>How to use:</strong> choose a gas to see its global warming potential (GWP) and temperature change potential (GTP) at several time horizons, how they change with the horizon, and where the gas sits among 249 others. The calculator below turns emissions into CO₂-equivalent.</p>
+<details class="termsbox" data-terms="CO₂-equivalent (CO₂e)|Pulse and step emission|Gas lifetime|Radiative efficiency (RE)|Climate–carbon feedback|CFC (chlorofluorocarbon)|HCFC (hydrochlorofluorocarbon)|HFC (hydrofluorocarbon)|PFC (perfluorocarbon)|SF₆ (sulphur hexafluoride)|Kyoto Protocol and the Kyoto basket|Mt, Gt, kg|AR6"><summary>More terms used on this tab (13)</summary><dl class="terms"></dl></details>
+
+      <div class="cards defs" id="m-defs">
+        <div class="card"><h3>GWP: global warming potential</h3>
+          <p class="note">Imagine releasing 1 kg of a gas today. It adds extra radiative forcing for as long as it stays in the air. The GWP adds up (integrates) that extra forcing over a chosen number of years, the <strong>time horizon</strong>, and divides by the same quantity for 1 kg of CO₂. So <strong>GWP-100 = 27.9</strong> for methane means 1 kg of methane traps as much heat over 100 years as 27.9 kg of CO₂.</p>
+          <div class="eq" id="m-tex-gwp"></div></div>
+        <div class="card"><h3>The numbers 20, 100 and 500</h3>
+          <p class="note">They are time horizons in years. <strong>GWP-20</strong> stresses the near term, so it is large for gases that disappear quickly (methane: 81). <strong>GWP-100</strong> is the most widely used, the one in national inventories and the Kyoto Protocol (methane: 27.9). <strong>GWP-500</strong> stresses the long term, so it favours gases that last (methane: 7.95). No horizon is the &ldquo;right&rdquo; one: choosing it is a value judgement about how much the near term matters compared with the long term.</p></div>
+        <div class="card"><h3>GTP: global temperature change potential</h3>
+          <p class="note">Instead of adding up forcing, the GTP asks one question: how much warmer is the planet in a <em>single chosen year</em> after the pulse, compared with the same mass of CO₂? <strong>GTP-50</strong> is 50 years after the emission, <strong>GTP-100</strong> is 100 years after. Because it ignores what happened before that year, it forgets short-lived gases faster than the GWP does.</p>
+          <div class="eq" id="m-tex-gtp"></div></div>
+        <div class="card"><h3>Related terms</h3>
+          <p class="note"><strong>AGWP and AGTP</strong> are the absolute versions before dividing by CO₂ (W m⁻² yr per kg, and K per kg). <strong>CO₂-equivalent</strong> is the emission multiplied by the metric: 1 Mt of methane is 27.9 Mt CO₂e at GWP-100. <strong>Pulse</strong> means a one-off emission. The values here include the extra CO₂ released because the warming weakens carbon uptake (the climate–carbon feedback), as in AR6. See the Glossary for lifetime and radiative efficiency.</p></div>
+      </div>
       <div class="player"><label class="yr">Gas <select id="m-gas" class="wide"></select></label></div>
       <p class="note" id="m-status"></p>
       <div class="kpis six">
-        <div class="kpi"><span class="v" id="m-GWP20">–</span><span class="l">GWP-20</span><span class="l" id="m-GWP20-l"></span></div>
-        <div class="kpi"><span class="v" id="m-GWP100">–</span><span class="l">GWP-100</span><span class="l" id="m-GWP100-l"></span></div>
-        <div class="kpi"><span class="v" id="m-GWP500">–</span><span class="l">GWP-500</span><span class="l" id="m-GWP500-l"></span></div>
-        <div class="kpi"><span class="v" id="m-GTP50">–</span><span class="l">GTP-50</span><span class="l" id="m-GTP50-l"></span></div>
-        <div class="kpi"><span class="v" id="m-GTP100">–</span><span class="l">GTP-100</span><span class="l" id="m-GTP100-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GWP20">–</span><span class="l">GWP-20 · 20-year horizon</span><span class="l" id="m-GWP20-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GWP100">–</span><span class="l">GWP-100 · 100-year horizon</span><span class="l" id="m-GWP100-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GWP500">–</span><span class="l">GWP-500 · 500-year horizon</span><span class="l" id="m-GWP500-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GTP50">–</span><span class="l">GTP-50 · temperature at year 50</span><span class="l" id="m-GTP50-l"></span></div>
+        <div class="kpi"><span class="v" id="m-GTP100">–</span><span class="l">GTP-100 · temperature at year 100</span><span class="l" id="m-GTP100-l"></span></div>
         <div class="kpi"><span class="v" id="m-life">–</span><span class="l">lifetime</span><span class="l">RE <span id="m-re">–</span> W m⁻² ppb⁻¹</span></div>
       </div>
     </section>

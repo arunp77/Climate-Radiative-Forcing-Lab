@@ -7,7 +7,7 @@ import type { History } from "./history";
 import { nonGhgErf, type NonGhgParams, type DriverState } from "./nonghg";
 import { ALL_DRIVERS, GROUPS } from "./drivers";
 import { initSpectra } from "./spectraView";
-import { initGlossary } from "./glossaryView";
+import { initGlossary, renderTermBoxes } from "./glossaryView";
 import { initWarming } from "./warmView";
 import { initAdjust } from "./adjustView";
 import { initAbout } from "./aboutView";
@@ -104,7 +104,7 @@ function render() {
     error_y: { type: "data", symmetric: false, array: rows.map((r) => Math.max(r.hi - r.value, 0)),
                arrayminus: rows.map((r) => Math.max(r.value - r.lo, 0)), color: "#44505c", thickness: 1.2 },
     hovertemplate: "%{x}<br>%{y:.3f} W m⁻²<extra></extra>",
-  }] as any, { ...layout, yaxis: { title: { text: "ERF (W m⁻²)" }, zeroline: true, zerolinecolor: "#44505c", gridcolor: "#e8edf3" },
+  }] as any, { ...layout, yaxis: { title: { text: "Effective radiative forcing (W m⁻²)" }, zeroline: true, zerolinecolor: "#44505c", gridcolor: "#e8edf3" },
     xaxis: { tickangle: -35, automargin: true } } as any, { responsive: true, displaylogo: false });
 
   const s = B.series;
@@ -114,7 +114,7 @@ function render() {
     { x: s.years, y: s.total_anthropogenic, mode: "lines", line: { color: "#2b7bd0", width: 2.5 }, name: "AR6 best estimate", hovertemplate: "%{x}: %{y:.2f} W m⁻²<extra>AR6</extra>" },
     { x: [B.year], y: [tot], mode: "markers", marker: { symbol: "diamond", size: 13, color: "#111" }, name: "Your setup", hovertemplate: "Your setup: %{y:.2f} W m⁻²<extra></extra>" },
   ] as any, { ...layout, showlegend: true, legend: { orientation: "h", y: 1.1 }, margin: { t: 10, r: 10, b: 55, l: 70 },
-    xaxis: { title: { text: "Year" }, gridcolor: "#e8edf3" }, yaxis: { title: { text: "Total anthropogenic ERF (W m⁻²)" }, gridcolor: "#e8edf3" } } as any,
+    xaxis: { title: { text: "Year" }, gridcolor: "#e8edf3" }, yaxis: { title: { text: "Total human-caused effective radiative forcing (W m⁻²)" }, gridcolor: "#e8edf3" } } as any,
     { responsive: true, displaylogo: false });
 }
 
@@ -159,6 +159,7 @@ async function main() {
     catch { $("status").textContent = "Copy failed: copy the address bar instead."; }
   });
   $<HTMLInputElement>("adv").addEventListener("change", (e) => document.body.classList.toggle("adv", (e.target as HTMLInputElement).checked));
+  renderTermBoxes();
   initTabs();
   initHistory(B.history, B.components);
   render();

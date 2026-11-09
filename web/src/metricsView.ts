@@ -1,5 +1,6 @@
 import Plotly from "plotly.js-basic-dist-min";
 import { sub } from "./glossaryView";
+import { renderTex } from "./equations";
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const FONT = { family: "Roboto, Segoe UI, sans-serif", color: "#1c2733", size: 14 };
@@ -24,7 +25,12 @@ const PRESETS = ["CH4", "N2O", "CFC-12", "HFC-134a", "SF6", "PFC-14"];
 const CALC_DEFAULT = ["CO2", "CH4", "N2O", "HFC-134a", "SF6", "CFC-12"];
 const COLORS = ["#2b7bd0", "#e8871e", "#2e9e5b", "#9467bd", "#d62728", "#8c564b", "#17becf"];
 
+const TEX_GWP = String.raw`\mathrm{GWP}_X(H)=\frac{\int_0^{H}\mathrm{RF}_X(t)\,dt}{\int_0^{H}\mathrm{RF}_{\mathrm{CO_2}}(t)\,dt}`;
+const TEX_GTP = String.raw`\mathrm{GTP}_X(H)=\frac{\Delta T_X(H)}{\Delta T_{\mathrm{CO_2}}(H)}`;
+
 export async function initMetrics() {
+  $("m-tex-gwp").innerHTML = renderTex(TEX_GWP);   // fixed strings of our own
+  $("m-tex-gtp").innerHTML = renderTex(TEX_GTP);
   const D: Data = await fetch("./data/metrics.json").then((r) => r.json());
   const byKey = new Map<string, Sp>();
   for (const s of D.species) byKey.set(key(s), s);

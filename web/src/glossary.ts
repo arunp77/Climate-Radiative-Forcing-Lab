@@ -1,11 +1,11 @@
 // Plain-language definitions used by the Glossary tab. Each entry is checked against the sources named in the
 // footer (IPCC AR6 WG1 glossary and chapters 6-7, the Montreal Protocol texts, HITRAN documentation).
 
-export type Category = "Gas families" | "Light and spectra" | "Forcing" | "Warming" | "Metrics" | "Scenarios and models" | "Policy" | "Units";
+export type Category = "Gas families" | "Light and spectra" | "Forcing" | "Warming" | "Metrics" | "Scenarios and models" | "Policy" | "Units" | "Data and sources";
 
 export interface Term { term: string; cat: Category; def: string }
 
-export const CATEGORIES: Category[] = ["Gas families", "Light and spectra", "Forcing", "Warming", "Metrics", "Scenarios and models", "Policy", "Units"];
+export const CATEGORIES: Category[] = ["Gas families", "Light and spectra", "Forcing", "Warming", "Metrics", "Scenarios and models", "Policy", "Units", "Data and sources"];
 
 export const TERMS: Term[] = [
   // ---- gas families
@@ -80,8 +80,9 @@ export const TERMS: Term[] = [
   { term: "Committed warming", cat: "Warming", def: "Further warming that will occur even if forcing stops rising, because the climate has not yet reached balance." },
 
   // ---- metrics
-  { term: "GWP (global warming potential)", cat: "Metrics", def: "The total forcing, added up over a time horizon (20, 100 or 500 years), caused by a 1 kg pulse of a gas, divided by that of 1 kg CO₂. GWP-100 of CH₄ is 27.9, of N₂O 273, of CFC-12 12 500." },
+  { term: "GWP (global warming potential)", cat: "Metrics", def: "The total forcing, added up over a time horizon (20, 100 or 500 years), caused by a 1 kg pulse of a gas, divided by that of 1 kg CO₂. The number after the hyphen is the horizon: GWP-100 is the 100-year value. GWP-100 of CH₄ is 27.9, of N₂O 273, of CFC-12 12 500." },
   { term: "GTP (global temperature change potential)", cat: "Metrics", def: "The temperature change at a chosen year (for example 50 or 100 years) after a 1 kg pulse of a gas, divided by that of 1 kg CO₂. It reflects the climate response rather than accumulated forcing." },
+  { term: "Time horizon (20, 100, 500 years)", cat: "Metrics", def: "The number of years over which a gas's effect is counted. GWP-20, GWP-100 and GWP-500 add up forcing over 20, 100 and 500 years; GTP-50 and GTP-100 look at the temperature 50 and 100 years after the emission. A short horizon favours quickly acting, short-lived gases; a long one favours gases that persist. The choice is a judgement, not a scientific fact." },
   { term: "AGWP and AGTP", cat: "Metrics", def: "The absolute versions, before dividing by CO₂: forcing integrated over time per kg (W m⁻² yr kg⁻¹) and temperature per kg (K kg⁻¹)." },
   { term: "CO₂-equivalent (CO₂e)", cat: "Metrics", def: "An amount of CO₂ that would have the same GWP-weighted effect as an emission of another gas. It depends on the metric and time horizon chosen." },
   { term: "Gas lifetime", cat: "Metrics", def: "The time for a pulse of a gas to fall to 1/e (37 %) of its initial amount. CH₄ is about 12 years, N₂O about 109 years, CFC-12 about 102 years, CF₄ about 50 000 years. CO₂ has no single lifetime." },
@@ -104,7 +105,34 @@ export const TERMS: Term[] = [
 
   // ---- units
   { term: "W m⁻² (watts per square metre)", cat: "Units", def: "Power per unit area. Forcing, OLR and energy imbalance are all in these units. Global-mean absorbed sunlight is about 240 W m⁻²." },
-  { term: "ppm, ppb, ppt", cat: "Units", def: "Parts per million, billion and trillion by number of molecules (mole fraction). CO₂ is about 420 ppm, CH₄ about 1 900 ppb, CFC-12 about 500 ppt." },
+  { term: "ppm, ppb, ppt", cat: "Units", def: "Parts per million, billion and trillion by number of molecules (the mole fraction, also called the mixing ratio). CO₂ is about 420 ppm, CH₄ about 1 900 ppb, CFC-12 about 500 ppt." },
   { term: "Mt, Gt, kg", cat: "Units", def: "Megatonne = 10⁹ kg, gigatonne = 10¹² kg. Emissions are often given in Mt per year; CO₂ emissions in Gt per year." },
   { term: "K versus °C", cat: "Units", def: "A change of 1 K equals a change of 1 °C, so temperature differences and sensitivities can be quoted in either." },
+
+  // ---- added so that every term used on a tab is defined on the site
+  { term: "SO₂ (sulphur dioxide)", cat: "Gas families", def: "A gas released when coal, oil and metal ores are burned. In the air it turns into sulphate particles, the main cooling aerosol." },
+  { term: "Black carbon (BC) and organic carbon (OC)", cat: "Gas families", def: "Black carbon is soot from incomplete burning; it absorbs sunlight and warms. Organic carbon, from burning fuel and biomass, mostly scatters sunlight and cools." },
+  { term: "NOₓ (nitrogen oxides)", cat: "Gas families", def: "NO and NO₂, released by combustion and lightning. They help form tropospheric ozone (a warming) and destroy methane through the OH radical (a cooling)." },
+  { term: "CO (carbon monoxide)", cat: "Gas families", def: "A pollutant from incomplete burning. It uses up the OH radical, so methane lasts longer, and it helps make ozone. Both effects add warming indirectly." },
+  { term: "VOC (volatile organic compounds)", cat: "Gas families", def: "Carbon compounds that evaporate easily, such as solvent and fuel vapours (here, those other than methane). They help form tropospheric ozone." },
+  { term: "OH (hydroxyl radical)", cat: "Gas families", def: "A very reactive molecule that acts as the atmosphere's cleaning agent, destroying methane, CO and many other gases. Its abundance sets how long methane lasts." },
+  { term: "NH₃ (ammonia)", cat: "Gas families", def: "Released by fertiliser and livestock. It forms ammonium nitrate and sulphate particles; AR6 uses ammonia emissions as the stand-in for nitrate-aerosol cooling." },
+  { term: "Troposphere and stratosphere", cat: "Light and spectra", def: "The troposphere is the lowest layer (up to about 11 km in the standard atmosphere), where weather happens and temperature falls with height. The stratosphere lies above it up to about 50 km, contains the ozone layer, and warms with height." },
+  { term: "TOA (top of the atmosphere)", cat: "Light and spectra", def: "The upper boundary where incoming sunlight and outgoing heat are counted, as satellites do. In the radiative-transfer model here the atmosphere extends to 60 km." },
+  { term: "Vibrational modes (bend and stretch)", cat: "Light and spectra", def: "A molecule absorbs infrared when a vibration changes its electric charge distribution. CO₂'s bend (ν₂, 15 µm) and asymmetric stretch (ν₃, 4.3 µm) are examples; the labels on the spectra name the vibration behind each band." },
+  { term: "Radiative transfer and line-by-line calculation", cat: "Light and spectra", def: "Radiative transfer is the physics of how radiation is absorbed, emitted and passed on through the air. A line-by-line calculation treats every spectral line separately on a very fine wavenumber grid (0.02 cm⁻¹ here), the most accurate approach and the reference for faster methods." },
+  { term: "Dobson unit (DU)", cat: "Units", def: "A measure of how much ozone lies above a place. 100 DU would be a layer of pure ozone 1 mm thick at sea-level pressure and 0 °C. The global average is about 300 DU." },
+  { term: "atm, hPa and Torr (pressure)", cat: "Units", def: "Units of pressure. Mean sea-level pressure is 1 atm = 1013.25 hPa = 760 Torr. Line widths grow with pressure, which is why the spectra depend on altitude." },
+  { term: "Anthropogenic", cat: "Forcing", def: "Caused by human activity, as opposed to natural causes such as the sun and volcanoes." },
+  { term: "Emulator", cat: "Forcing", def: "A simple formula fitted to reproduce the results of a much more complex model. The non-gas forcers on the Forcing balance tab are emulators of the AR6 results." },
+  { term: "Forcing equations (Meinshausen 2020, Etminan 2016, Myhre 1998)", cat: "Forcing", def: "Three published formulas for the forcing of CO₂, CH₄ and N₂O as a function of concentration. Myhre et al. (1998) is the classic form used in the IPCC Third Assessment Report. Etminan et al. (2016) raised methane's forcing by about a quarter by including its absorption of sunlight and corrected band overlaps. Meinshausen et al. (2020) refits those expressions and is the form used in AR6." },
+  { term: "SARF (stratosphere-adjusted radiative forcing)", cat: "Forcing", def: "The forcing once the stratosphere has settled to its new temperature but before the troposphere reacts. For doubled CO₂ AR6 gives 3.75 W m⁻². Multiplying by the tropospheric adjustment factor (1.05 for CO₂) gives the effective radiative forcing." },
+  { term: "Ocean mixing", cat: "Warming", def: "How quickly heat moves from the thin surface layer of the ocean into the deeper ocean. Faster mixing stores more heat at depth and delays surface warming; slower mixing makes the surface warm faster." },
+  { term: "IPCC reports: TAR, AR4, AR5, AR6", cat: "Data and sources", def: "The Intergovernmental Panel on Climate Change publishes an assessment roughly every six to seven years: the Third (TAR, 2001), Fourth (AR4, 2007), Fifth (AR5, 2013) and Sixth (AR6, 2021). This site uses AR6 values and shows the TAR-era formula for comparison." },
+  { term: "CMIP6", cat: "Data and sources", def: "The sixth Coupled Model Intercomparison Project: a coordinated set of experiments run by about 100 climate models around the world. Many AR6 numbers, such as the ozone and aerosol forcing, come from it." },
+  { term: "RCMIP", cat: "Data and sources", def: "The Reduced Complexity Model Intercomparison Project. It supplied the standard emissions of the SSP scenarios used on the Warming tab." },
+  { term: "CERES", cat: "Data and sources", def: "Clouds and the Earth's Radiant Energy System: NASA satellite instruments that measure the sunlight the Earth reflects and the heat it radiates. The source of the observed outgoing radiation and cloud effect used to check the Spectra tab." },
+  { term: "MT_CKD", cat: "Data and sources", def: "The standard model of the water-vapour continuum, developed by Atmospheric and Environmental Research (AER) and used here together with the HITRAN line data." },
+  { term: "HadCRUT5", cat: "Data and sources", def: "A global temperature record built from land thermometers and ship and buoy measurements since 1850, made by the UK Met Office Hadley Centre and the University of East Anglia." },
+  { term: "NOAA and the Mauna Loa record", cat: "Data and sources", def: "NOAA is the US National Oceanic and Atmospheric Administration. Its measurements of CO₂ on Mauna Loa, Hawaii, continuing the record begun by Charles Keeling in 1958, are the longest direct record of rising CO₂ (the Keeling curve)." },
 ];

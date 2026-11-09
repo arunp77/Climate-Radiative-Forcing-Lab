@@ -101,3 +101,16 @@ export async function initGlossary() {
   q.addEventListener("input", draw);
   draw();
 }
+
+/** Fill every "Key terms on this tab" box from the glossary, so each definition has a single source. */
+export function renderTermBoxes(root: ParentNode = document) {
+  const byName = new Map(TERMS.map((t) => [t.term, t]));
+  root.querySelectorAll<HTMLElement>("details.termsbox[data-terms]").forEach((box) => {
+    const names = (box.dataset.terms ?? "").split("|");
+    const dl = box.querySelector("dl")!;
+    dl.innerHTML = names.map((n) => {
+      const t = byName.get(n);
+      return t ? `<div class="term"><dt>${t.term}</dt><dd>${t.def}</dd></div>` : "";
+    }).join("");
+  });
+}
